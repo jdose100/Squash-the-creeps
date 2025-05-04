@@ -1,0 +1,7 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://dxpx4g1p0a2yj"]
+
+[ext_resource type="Texture2D" uid="uid://c1485rrhcs8df" path="res://art/grass_texture.jpg" id="1_2lmcp"]
+
+[resource]
+albedo_texture = ExtResource("1_2lmcp")
+distance_fade_max_distance = 40.0

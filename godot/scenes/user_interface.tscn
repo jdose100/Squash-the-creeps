@@ -1,0 +1,128 @@
+[gd_scene load_steps=11 format=3 uid="uid://bw1jjrtt5ug48"]
+
+[ext_resource type="FontFile" uid="uid://cyxhh7ddkn62q" path="res://fonts/Montserrat-Medium.ttf" id="1_y1h3b"]
+[ext_resource type="AudioStream" uid="uid://54bgxs2a18rk" path="res://art/click.wav" id="2_y1h3b"]
+
+[sub_resource type="Theme" id="Theme_jbsfc"]
+default_font = ExtResource("1_y1h3b")
+default_font_size = 22
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jbsfc"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_y1h3b"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cufge"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lmgon"]
+
+[sub_resource type="InputEventKey" id="InputEventKey_tbgi4"]
+device = -1
+keycode = 32
+unicode = 32
+
+[sub_resource type="InputEventKey" id="InputEventKey_tefeu"]
+device = -1
+keycode = 4194309
+
+[sub_resource type="Shortcut" id="Shortcut_jbsfc"]
+events = [SubResource("InputEventKey_tbgi4"), SubResource("InputEventKey_tefeu")]
+
+[node name="UserInterface" type="UserInterface"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_jbsfc")
+
+[node name="Improvement" type="Label" parent="."]
+visible = false
+layout_mode = 0
+offset_left = 484.0
+offset_top = 5.0
+offset_right = 718.0
+offset_bottom = 33.0
+theme_override_colors/font_color = Color(0.113725, 0.733333, 0.988235, 0.788235)
+theme_override_colors/font_shadow_color = Color(0.20242, 0.643191, 0.770076, 0.913725)
+theme_override_constants/shadow_outline_size = 4
+text = "Creeps is slow!"
+horizontal_alignment = 1
+
+[node name="MaxScoreLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 22.0
+offset_top = 20.0
+offset_right = 160.0
+offset_bottom = 48.0
+theme_override_colors/font_color = Color(0.113725, 0.733333, 0.988235, 0.788235)
+theme_override_colors/font_shadow_color = Color(0.20242, 0.643191, 0.770076, 0.913725)
+text = "Max score: 0"
+
+[node name="ScoreLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 60.0
+offset_right = 112.0
+offset_bottom = 88.0
+theme_override_colors/font_color = Color(0.113725, 0.733333, 0.988235, 0.788235)
+theme_override_colors/font_shadow_color = Color(0.203922, 0.643137, 0.768627, 0.862745)
+text = "Score: 0"
+
+[node name="ClickSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_y1h3b")
+
+[node name="MainHUD" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.14902)
+
+[node name="NameOfGame" type="Label" parent="MainHUD"]
+modulate = Color(0.976471, 0.313726, 0.133333, 1)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -144.0
+offset_top = -93.0
+offset_right = 72.0
+offset_bottom = -65.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.44, 1.36)
+theme_override_colors/font_color = Color(0.807843, 0.14902, 1, 1)
+theme_override_colors/font_shadow_color = Color(0.317647, 0, 0, 1)
+text = "Squash the Creeps!"
+
+[node name="LanguageButton" type="Button" parent="MainHUD"]
+modulate = Color(0.964706, 0, 0.211765, 1)
+layout_mode = 0
+offset_left = 228.0
+offset_top = 330.0
+offset_right = 496.0
+offset_bottom = 382.0
+theme_type_variation = &"FlatButton"
+theme_override_constants/outline_size = 5
+theme_override_styles/focus = SubResource("StyleBoxEmpty_jbsfc")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_y1h3b")
+action_mode = 0
+text = "Select language (ru/en)"
+
+[node name="StartButton" type="Button" parent="MainHUD"]
+modulate = Color(0.964706, 0, 0.211765, 1)
+layout_mode = 0
+offset_left = 283.0
+offset_top = 258.0
+offset_right = 428.0
+offset_bottom = 310.0
+theme_type_variation = &"FlatButton"
+theme_override_constants/outline_size = 4
+theme_override_styles/focus = SubResource("StyleBoxEmpty_cufge")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_lmgon")
+shortcut = SubResource("Shortcut_jbsfc")
+text = "Start"
