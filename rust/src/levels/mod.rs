@@ -5,7 +5,7 @@ use crate::{mob::Mob, player::Player, ui::UserInterface};
 use godot::{
     classes::{Label, Marker3D, Path3D, PathFollow3D},
     global::randf_range,
-    obj::{BaseRef, WithBaseField},
+    obj::WithBaseField,
     prelude::*,
 };
 
@@ -58,9 +58,9 @@ impl INode for BaseLevel {
     fn init(base: Base<Node>) -> Self {
         Self {
             all_mobs_on_level: 0,
-            use_child_mob_init_logic: false,
+            use_child_mob_init_logic: true,
             squashed_mobs: 0,
-            base,
+            base
         }
     }
 
@@ -98,18 +98,37 @@ impl INode for BaseLevel {
                     mob.bind_mut().initialize(follow_path, path, follow_speed);
                 }
             }
-
-            // init player and ui
-            Self::init_player_and_ui(self.base());
         }
 
-            // connect 'hit' signal from player
-            self.base()
-                .get_node_as::<Player>("Player")
-                .signals()
-                .hit()
-                .connect_obj(self, Self::on_player_hit);
-        // }
+        // connect 'hit' signal from player
+        self.base()
+            .get_node_as::<Player>("Player")
+            .signals()
+            .hit()
+            .connect_obj(self, Self::on_player_hit);
+
+        // ! FOR DEVELOP!
+        self.base()
+            .get_node_as::<Player>("Player")
+            .bind_mut()
+            .alive();
+
+        self.base()
+            .get_node_as::<UserInterface>("UserInterface")
+            .bind_mut()
+            .start_new_game();
+
+        // alive player
+        self.base()
+            .get_node_as::<Player>("Player")
+            .bind_mut()
+            .alive();
+
+        // ! NEED ONLY FOR DEVELOP LEVELS AND FAST TESTING
+        self.base()
+            .get_node_as::<UserInterface>("UserInterface")
+            .bind_mut()
+            .start_new_game();
     }
 
     fn process(&mut self, _delta: f64) {
@@ -121,27 +140,6 @@ impl INode for BaseLevel {
 
 #[godot_api]
 impl BaseLevel {
-    /// Setup player and IU with BaseLevel parameters, need for delete 
-    /// boilerplate code in child classes.
-    pub fn init_player_and_ui<T: GodotClass + INode>(base: BaseRef<T>) {
-        if base.is_instance_valid() {
-            // get player and ui
-            let player = base.try_get_node_as::<Player>("Player");
-            let ui = base.try_get_node_as::<UserInterface>("UserInterface");
-
-            // setup player if is exists
-            if let Some(mut player) = player {
-                // alive player
-                player.bind_mut().alive();
-            }
-
-            // setup ui if is exists
-            if let Some(mut ui) = ui {
-                ui.bind_mut().start_new_game();
-            }
-        }
-    }
-
     /// Update 'squashed_mobs' on mob squashed and play sound if all mobs in level squashed
     fn on_mob_squashed(&mut self) {
         self.squashed_mobs += 1;

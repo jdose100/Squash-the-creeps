@@ -60,7 +60,7 @@ impl ICharacterBody3D for Player {
             jump_impulse: 20.0,
             speed: 14.0,
             spawn_coords: Vector3::ZERO,
-            base,
+            base
         }
     }
 
@@ -141,8 +141,7 @@ impl ICharacterBody3D for Player {
         // iterate through all collisions that occurred this frame
         for index in 0..self.base().get_slide_collision_count() {
             // we get one of the collisions with the player
-            let collision = 
-                self.base_mut().get_slide_collision(index).unwrap();
+            let collision = self.base_mut().get_slide_collision(index).unwrap();
 
             // if there are duplicate with a mob in a single frame
             // the mob will be deleted after the first collision, and
@@ -226,7 +225,7 @@ impl Player {
 
     /// Kill the player.
     fn kill(&mut self) {
-        if !self.is_die && !self.shield_active && false {
+        if !self.is_die && !self.shield_active {
             self.is_die = true;
 
             // hide Pivot
