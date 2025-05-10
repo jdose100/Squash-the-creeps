@@ -3,65 +3,86 @@
 
 use godot::{
     classes::{
-        AnimationPlayer, AudioStreamPlayer, CharacterBody3D, CollisionShape3D, GpuParticles3D, 
-        ICharacterBody3D, Path3D, PathFollow3D, VisibleOnScreenNotifier3D
-    }, 
-    global::{randf_range, randi_range}, 
-    obj::WithBaseField, 
-    prelude::*
+        AnimationPlayer, AudioStreamPlayer, CharacterBody3D, CollisionShape3D, GpuParticles3D,
+        ICharacterBody3D, Path3D, PathFollow3D, VisibleOnScreenNotifier3D,
+    },
+    global::{randf_range, randi_range},
+    obj::WithBaseField,
+    prelude::*,
 };
 
 /// This class is a enemy for player.
 #[derive(GodotClass)]
-#[class(init, base = CharacterBody3D)]
+#[class(base = CharacterBody3D)]
 pub struct Mob {
-    #[init(val = 1.0)] /// Improvement for player.
+    /// Improvement for player.
     pub slowdown: f64,
 
-    #[init(val = Vector3::ZERO)] /// Set 'self.position' to spawn_coords if mob alive.
+    /// Set 'self.position' to spawn_coords if mob alive.
     pub spawn_coords: Vector3,
 
-    #[init(val = Vector3::ONE)] /// Set 'self.velocity' to spawn_velocity if mob alive.
+    /// Set 'self.velocity' to spawn_velocity if mob alive.
     pub spawn_velocity: Vector3,
 
-    #[init(val = 10)] /// Minimum speed of the mob, in m/s.
-    #[export] pub min_speed: i64,
+    /// Minimum speed of the mob, in m/s.
+    #[export]
+    pub min_speed: i64,
 
-    #[init(val = 18)] /// Maximum speed of the mob, in m/s.
-    #[export] pub max_speed: i64,
+    /// Maximum speed of the mob, in m/s.
+    #[export]
+    pub max_speed: i64,
 
-    #[init(val = 0.84)] /// Minimum scale of the mob.
-    #[export] pub min_scale: f64,
+    /// Minimum scale of the mob.
+    #[export]
+    pub min_scale: f64,
 
-    #[init(val = 1.09)] /// Maximum scale of the mob.
-    #[export] pub max_scale: f64,
+    /// Maximum scale of the mob.
+    #[export]
+    pub max_scale: f64,
 
-    #[init(val = None)] /// needs for move mob along the trajectory, depends on path!
+    /// needs for move mob along the trajectory, depends on path!
     follow_path: Option<Gd<PathFollow3D>>,
 
-    #[init(val = 0.1)] /// Speed for 'follow_path' and 'path'.
+    /// Speed for 'follow_path' and 'path'.
     follow_speed: f64,
 
-    #[init(val = None)] /// Needs for move mob along the trajectory, depends on 'follow_path'!
+    /// Needs for move mob along the trajectory, depends on 'follow_path'!
     path: Option<Gd<Path3D>>,
-    
-    base: Base<CharacterBody3D>
-} 
 
-#[godot_api] impl ICharacterBody3D for Mob {
+    base: Base<CharacterBody3D>,
+}
+
+#[godot_api]
+impl ICharacterBody3D for Mob {
+    fn init(base: Base<CharacterBody3D>) -> Self {
+        Self {
+            slowdown: 1.0,
+            spawn_coords: Vector3::ZERO,
+            spawn_velocity: Vector3::ONE,
+            min_speed: 10,
+            max_speed: 18,
+            min_scale: 0.84,
+            max_scale: 1.09,
+            follow_path: None,
+            follow_speed: 0.1,
+            path: None,
+            base
+        }
+    }
+
     fn ready(&mut self) {
         // connect method for screen_exited signal
-        self.base().get_node_as
-            ::<VisibleOnScreenNotifier3D>("VisibleNotifier")
-            .signals().screen_exited()
-            .connect_obj(
-                self, 
-                Self::on_visible_on_screen_notifier_3d_screen_exited
-            );
-        
+        self.base()
+            .get_node_as::<VisibleOnScreenNotifier3D>("VisibleNotifier")
+            .signals()
+            .screen_exited()
+            .connect_obj(self, Self::on_visible_on_screen_notifier_3d_screen_exited);
+
         // connect method for DeadSound.finished signal
-        self.base().get_node_as::<GpuParticles3D>("DeadEffect")
-            .signals().finished()
+        self.base()
+            .get_node_as::<GpuParticles3D>("DeadEffect")
+            .signals()
+            .finished()
             .connect_obj(self, Self::on_dead_effect_finished);
     }
 
@@ -78,7 +99,8 @@ pub struct Mob {
             let new_position = follow_path.get_position() + path.get_position();
 
             // calculate rotation
-            self.base_mut().look_at_from_position(old_position, new_position);
+            self.base_mut()
+                .look_at_from_position(old_position, new_position);
 
             // set new position
             // self.base_mut().set_position(new_position);
@@ -87,19 +109,21 @@ pub struct Mob {
             // update ratio
             let ratio = follow_path.get_progress() + self.follow_speed as f32;
             follow_path.set_progress(ratio);
-        } 
+        }
 
         self.base_mut().move_and_slide();
     }
 }
 
-#[godot_api] impl Mob {
-    #[signal] pub fn squashed();
+#[godot_api]
+impl Mob {
+    #[signal]
+    pub fn squashed();
 
     /// This function will be called from BaseLevel and need for init mob.
     pub fn initialize(
-        &mut self, 
-        follow_path: Option<Gd<PathFollow3D>>, 
+        &mut self,
+        follow_path: Option<Gd<PathFollow3D>>,
         path: Option<Gd<Path3D>>,
         follow_speed: f64,
     ) {
@@ -112,21 +136,18 @@ pub struct Mob {
         self.spawn_coords = self.base().get_position();
 
         // set scale of the mob
-        let scale_factor = randf_range(
-            self.min_scale, self.max_scale
-        ) as f32;
+        let scale_factor = randf_range(self.min_scale, self.max_scale) as f32;
 
-        self.base_mut().set_scale(Vector3::new(
-            scale_factor, scale_factor, scale_factor
-        ));
-        
+        self.base_mut()
+            .set_scale(Vector3::new(scale_factor, scale_factor, scale_factor));
+
         // we calculate a random speed
-        let random_speed = randi_range(
-            self.min_speed, self.max_speed
-        ) as f32 / self.slowdown as f32;
+        let random_speed =
+            randi_range(self.min_speed, self.max_speed) as f32 / self.slowdown as f32;
 
         // set animation speed scale
-        let mut animation = self.base()
+        let mut animation = self
+            .base()
             .get_node_as::<AnimationPlayer>("AnimationPlayer");
         animation.set_speed_scale(random_speed / self.min_speed as f32);
     }
@@ -134,15 +155,19 @@ pub struct Mob {
     /// Kill the mob.
     pub fn squash(&mut self) {
         // start dead effect
-        self.base().get_node_as::<GpuParticles3D>("DeadEffect")
+        self.base()
+            .get_node_as::<GpuParticles3D>("DeadEffect")
             .set_emitting(true);
 
         // disable collision shape
-        self.base().get_node_as::<CollisionShape3D>("CollisionShape3D")
+        self.base()
+            .get_node_as::<CollisionShape3D>("CollisionShape3D")
             .set_disabled(true);
 
         // start dead sound
-        self.base().get_node_as::<AudioStreamPlayer>("DeadSound").play();
+        self.base()
+            .get_node_as::<AudioStreamPlayer>("DeadSound")
+            .play();
 
         // hide pivot
         self.base().get_node_as::<Node3D>("Pivot").hide();
@@ -175,7 +200,8 @@ pub struct Mob {
         self.base_mut().set_position(spawn_coords);
 
         // enable collision shape
-        self.base().get_node_as::<CollisionShape3D>("CollisionShape3D")
+        self.base()
+            .get_node_as::<CollisionShape3D>("CollisionShape3D")
             .set_deferred("disabled", &Variant::from(false));
 
         // show pivot

@@ -1,10 +1,11 @@
-use godot::prelude::*;
+use godot::prelude::{gdextension, ExtensionLibrary};
 
-mod main_scene;
-mod player;
 mod levels;
+mod main_scene;
 mod mob;
+mod player;
 mod ui;
 
 struct SquashTheCreeps;
-#[gdextension] unsafe impl ExtensionLibrary for SquashTheCreeps {}
+#[gdextension]
+unsafe impl ExtensionLibrary for SquashTheCreeps {}

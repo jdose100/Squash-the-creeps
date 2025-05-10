@@ -3,29 +3,32 @@
 // import decencies
 use crate::{mob::Mob, player::Player, ui::UserInterface};
 use godot::{
-    classes::{Label, Marker3D, Path3D, PathFollow3D}, 
-    global::randf_range, 
-    obj::WithBaseField, 
-    prelude::*
+    classes::{Label, Marker3D, Path3D, PathFollow3D},
+    global::randf_range,
+    obj::WithBaseField,
+    prelude::*,
 };
 
 // functions providing a string API for loading data from a scene
 
 /// Get mob path in scene with respecting the hierarchy of names.
 /// Return path to 'Mob' class in scene.
-#[inline(always)] fn get_text_mob_name(mob_num: i64) -> String {
+#[inline(always)]
+fn get_text_mob_name(mob_num: i64) -> String {
     format!("Mobs/Mob{mob_num}")
 }
 
 /// Get mob path in scene with respecting the hierarchy of names.
 /// Return path to 'PathFollow3D' class in scene.
-#[inline(always)] fn get_text_mob_follow_path(mob_num: i64) -> String {
+#[inline(always)]
+fn get_text_mob_follow_path(mob_num: i64) -> String {
     format!("Mobs/Mob{mob_num}Path/PathFollow3D")
 }
 
 /// Get mob path in scene with respecting the hierarchy of names.
 /// Return path to 'Path3D' class in scene.
-#[inline(always)] fn get_text_mob_path(mob_num: i64) -> String {
+#[inline(always)]
+fn get_text_mob_path(mob_num: i64) -> String {
     format!("Mobs/Mob{mob_num}Path")
 }
 
@@ -34,23 +37,33 @@ mod level2;
 
 /// Base logic for levels.
 #[derive(GodotClass)]
-#[class(init, base = Node)]
+#[class(base = Node)]
 struct BaseLevel {
-    #[init(val = 0)] /// How much mobs on level.
-    #[export] all_mobs_on_level: i64, 
+    /// How much mobs on level.
+    #[export]
+    all_mobs_on_level: i64,
 
-    /// Specifies whether to use the standard creep death handling logic, 
+    /// Specifies whether to use the standard creep death handling logic,
     /// or use a different logic (implemented in a child class).
-    #[init(val = true)]
     pub use_child_mob_init_logic: bool,
 
-    #[init(val = 0)] /// How much mobs squashed.
+    /// How much mobs squashed.
     squashed_mobs: i64,
 
-    base: Base<Node>
+    base: Base<Node>,
 }
 
-#[godot_api] impl INode for BaseLevel {
+#[godot_api]
+impl INode for BaseLevel {
+    fn init(base: Base<Node>) -> Self {
+        Self {
+            all_mobs_on_level: 0,
+            use_child_mob_init_logic: true,
+            squashed_mobs: 0,
+            base
+        }
+    }
+
     fn ready(&mut self) {
         godot_print!("ready base level: {}", self.base().get_name());
 
@@ -59,24 +72,24 @@ struct BaseLevel {
             // connect 'squashed' signal from all mobs
             for i in 0..self.all_mobs_on_level {
                 // get mob from scene
-                let mob = self.base().try_get_node_as::<Mob>(&get_text_mob_name(i)); 
+                let mob = self.base().try_get_node_as::<Mob>(&get_text_mob_name(i));
 
                 // check mob is exits or not
                 if let Some(mut mob) = mob {
                     // if mob exits then connect signal
-                    mob.signals().squashed().connect_obj(self, Self::on_mob_squashed);
+                    mob.signals()
+                        .squashed()
+                        .connect_obj(self, Self::on_mob_squashed);
 
                     //* The following code is needed to be able to move along a given path!
 
                     // get follow path
-                    let follow_path = self.base().try_get_node_as::<PathFollow3D>(
-                        &get_text_mob_follow_path(i)
-                    );
+                    let follow_path = self
+                        .base()
+                        .try_get_node_as::<PathFollow3D>(&get_text_mob_follow_path(i));
 
                     // get path
-                    let path = self.base().try_get_node_as::<Path3D>(
-                        &get_text_mob_path(i)
-                    );
+                    let path = self.base().try_get_node_as::<Path3D>(&get_text_mob_path(i));
 
                     // get speed
                     let follow_speed = randf_range(0.1, 0.34);
@@ -88,29 +101,45 @@ struct BaseLevel {
         }
 
         // connect 'hit' signal from player
-        self.base().get_node_as::<Player>("Player")
-            .signals().hit().connect_obj(self, Self::on_player_hit);
+        self.base()
+            .get_node_as::<Player>("Player")
+            .signals()
+            .hit()
+            .connect_obj(self, Self::on_player_hit);
 
         // ! FOR DEVELOP!
-        self.base().get_node_as::<Player>("Player").bind_mut().alive();
-        
-        self.base().get_node_as::<UserInterface>("UserInterface").bind_mut().start_new_game();
+        self.base()
+            .get_node_as::<Player>("Player")
+            .bind_mut()
+            .alive();
+
+        self.base()
+            .get_node_as::<UserInterface>("UserInterface")
+            .bind_mut()
+            .start_new_game();
 
         // alive player
-        self.base().get_node_as::<Player>("Player").bind_mut().alive();
+        self.base()
+            .get_node_as::<Player>("Player")
+            .bind_mut()
+            .alive();
 
         // ! NEED ONLY FOR DEVELOP LEVELS AND FAST TESTING
-        self.base().get_node_as::<UserInterface>("UserInterface").bind_mut().start_new_game();
+        self.base()
+            .get_node_as::<UserInterface>("UserInterface")
+            .bind_mut()
+            .start_new_game();
     }
 
     fn process(&mut self, _delta: f64) {
-        self.base().get_node_as::<Marker3D>("CameraPivot").set_position(
-            self.base().get_node_as::<Player>("Player").get_position()
-        );
+        self.base()
+            .get_node_as::<Marker3D>("CameraPivot")
+            .set_position(self.base().get_node_as::<Player>("Player").get_position());
     }
 }
 
-#[godot_api] impl BaseLevel {
+#[godot_api]
+impl BaseLevel {
     /// Update 'squashed_mobs' on mob squashed and play sound if all mobs in level squashed
     fn on_mob_squashed(&mut self) {
         self.squashed_mobs += 1;
@@ -120,7 +149,8 @@ struct BaseLevel {
             godot_print!("all mob squashed!");
 
             //* for visual output, only on develop!
-            let mut label = self.base()
+            let mut label = self
+                .base()
                 .get_node_as::<UserInterface>("UserInterface")
                 .get_node_as::<Label>("Improvement");
 
@@ -129,16 +159,17 @@ struct BaseLevel {
         }
     }
 
-    /// auto alive for player, 
+    /// auto alive for player,
     // ! ONLY FOR DEVELOP!
     fn on_player_hit(&mut self) {
-        self.base().get_node_as::<Player>("Player").bind_mut().alive(); 
+        self.base()
+            .get_node_as::<Player>("Player")
+            .bind_mut()
+            .alive();
 
         // alive all mobs
         for i in 0..self.all_mobs_on_level {
-            let mob = self.base().try_get_node_as::<Mob>(
-                &format!("Mobs/Mob{i}")
-            );
+            let mob = self.base().try_get_node_as::<Mob>(&format!("Mobs/Mob{i}"));
 
             if let Some(mut mob) = mob {
                 mob.bind_mut().alive();
@@ -149,7 +180,9 @@ struct BaseLevel {
         self.squashed_mobs = 0;
 
         // hide label
-        self.base().get_node_as::<UserInterface>("UserInterface")
-            .get_node_as::<Label>("Improvement").hide();
+        self.base()
+            .get_node_as::<UserInterface>("UserInterface")
+            .get_node_as::<Label>("Improvement")
+            .hide();
     }
 }
