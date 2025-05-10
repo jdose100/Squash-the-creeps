@@ -40,6 +40,10 @@ pub struct Mob {
     #[export]
     pub max_scale: f64,
 
+    /// Indicates whether the mob is dead or not. 
+    /// Need for scene logic.
+    pub is_die: bool,
+
     /// needs for move mob along the trajectory, depends on path!
     follow_path: Option<Gd<PathFollow3D>>,
 
@@ -63,10 +67,11 @@ impl ICharacterBody3D for Mob {
             max_speed: 18,
             min_scale: 0.84,
             max_scale: 1.09,
+            is_die: false,
             follow_path: None,
             follow_speed: 0.1,
             path: None,
-            base
+            base,
         }
     }
 
@@ -87,6 +92,8 @@ impl ICharacterBody3D for Mob {
     }
 
     fn physics_process(&mut self, _delta: f64) {
+        // if self.is_die { return; }
+
         // moves the mob along the trajectory if possible
         if let Some(mut follow_path) = self.follow_path.clone() {
             // get path
@@ -154,6 +161,8 @@ impl Mob {
 
     /// Kill the mob.
     pub fn squash(&mut self) {
+        self.is_die = true;
+
         // start dead effect
         self.base()
             .get_node_as::<GpuParticles3D>("DeadEffect")
@@ -191,6 +200,8 @@ impl Mob {
 
     /// Alive mob.
     pub fn alive(&mut self) {
+        self.is_die = false;
+
         // set velocity
         let spawn_velocity = self.spawn_velocity;
         self.base_mut().set_velocity(spawn_velocity);

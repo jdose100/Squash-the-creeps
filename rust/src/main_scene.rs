@@ -39,7 +39,7 @@ impl INode for MainScene {
         Self {
             mob_scene: OnReady::from_loaded("res://scenes/mob.tscn"),
             slow_creeps: 1.0,
-            base
+            base,
         }
     }
 
