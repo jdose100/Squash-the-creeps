@@ -53,7 +53,6 @@ point_count = 4
 
 [node name="Level1 (Tutorial level)" type="BaseLevel"]
 all_mobs_on_level = 3
-used_base_class = true
 
 [node name="TutorialLabels" type="Node" parent="."]
 

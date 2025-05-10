@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://bannay6t7dfdn"]
+[gd_scene load_steps=20 format=3 uid="uid://bannay6t7dfdn"]
 
 [ext_resource type="Material" uid="uid://c0cp1qoswa4to" path="res://art/materials/wall.tres" id="1_fiq81"]
 [ext_resource type="Material" uid="uid://dxpx4g1p0a2yj" path="res://art/materials/grass.tres" id="1_j2425"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://bw1jjrtt5ug48" path="res://scenes/user_interface.tscn" id="2_g2h2n"]
 [ext_resource type="PackedScene" uid="uid://fxl4ba8g4ca3" path="res://scenes/objecst/mob.tscn" id="3_l37oo"]
 [ext_resource type="PackedScene" uid="uid://cwevoa4jfecwe" path="res://scenes/objecst/player.tscn" id="3_ra442"]
+[ext_resource type="Material" uid="uid://c52akaeps0aid" path="res://art/materials/platform.tres" id="4_ibugp"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_qpwj6"]
 
@@ -48,8 +49,8 @@ _data = {
 }
 point_count = 6
 
-[node name="Level2 (Spikes level)" type="BaseLevel"]
-all_mobs_on_level = 6
+[node name="Level2 (Spikes level)" type="Level2"]
+all_mobs_on_level = 7
 
 [node name="Objects" type="Node" parent="."]
 
@@ -454,12 +455,25 @@ shape = SubResource("BoxShape3D_g2h2n")
 material_override = ExtResource("1_j2425")
 mesh = SubResource("BoxMesh_ra442")
 
+[node name="Door" type="StaticBody3D" parent="Objects" groups=["door"]]
+transform = Transform3D(7, 0, 0, 0, 7, 0, 0, 0, 1, 16.2152, 3.05209, 28.8415)
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/Door"]
+shape = SubResource("BoxShape3D_l37oo")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/Door"]
+sorting_use_aabb_center = false
+material_override = ExtResource("4_ibugp")
+mesh = SubResource("BoxMesh_qpwj6")
+
 [node name="Mobs" type="Node" parent="."]
 
 [node name="Mob0" parent="Mobs" instance=ExtResource("3_l37oo")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -42.8302, 0.33495, 20.207)
 
-[node name="Mob0Path" type="Path3D" parent="Mobs" groups=["mob"]]
+[node name="Mob0Path" type="Path3D" parent="Mobs"]
 curve = SubResource("Curve3D_l37oo")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Mobs/Mob0Path"]
@@ -468,7 +482,7 @@ transform = Transform3D(-0.0189367, -0.00370768, -0.999765, -1.16415e-10, 0.9999
 [node name="Mob1" parent="Mobs" groups=["ArenaMobs"] instance=ExtResource("3_l37oo")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.16024, 0.165517, 1.78601)
 
-[node name="Mob1Path" type="Path3D" parent="Mobs" groups=["ArenaMobs", "mob"]]
+[node name="Mob1Path" type="Path3D" parent="Mobs"]
 curve = SubResource("Curve3D_qpwj6")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Mobs/Mob1Path"]
@@ -477,7 +491,7 @@ transform = Transform3D(-0.0422662, 0.0200085, -0.998906, 2.79397e-09, 0.999796,
 [node name="Mob2" parent="Mobs" groups=["ArenaMobs"] instance=ExtResource("3_l37oo")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.781, 0.077, 1.786)
 
-[node name="Mob2Path" type="Path3D" parent="Mobs" groups=["ArenaMobs", "mob"]]
+[node name="Mob2Path" type="Path3D" parent="Mobs"]
 curve = SubResource("Curve3D_qpwj6")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Mobs/Mob2Path"]
@@ -486,7 +500,7 @@ transform = Transform3D(-0.0422662, 0.0200085, -0.998906, 2.79397e-09, 0.999796,
 [node name="Mob3" parent="Mobs" groups=["ArenaMobs"] instance=ExtResource("3_l37oo")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.793, 0.077, 1.786)
 
-[node name="Mob3Path" type="Path3D" parent="Mobs" groups=["ArenaMobs", "mob"]]
+[node name="Mob3Path" type="Path3D" parent="Mobs"]
 curve = SubResource("Curve3D_qpwj6")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Mobs/Mob3Path"]
@@ -495,7 +509,7 @@ transform = Transform3D(-0.0422662, 0.0200085, -0.998906, 2.79397e-09, 0.999796,
 [node name="Mob4" parent="Mobs" groups=["ArenaMobs"] instance=ExtResource("3_l37oo")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.16024, 0.165517, 24.9773)
 
-[node name="Mob4Path" type="Path3D" parent="Mobs" groups=["ArenaMobs", "mob"]]
+[node name="Mob4Path" type="Path3D" parent="Mobs"]
 curve = SubResource("Curve3D_qpwj6")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Mobs/Mob4Path"]
@@ -504,7 +518,7 @@ transform = Transform3D(-0.0422662, 0.0200085, -0.998906, 2.79397e-09, 0.999796,
 [node name="Mob5" parent="Mobs" groups=["ArenaMobs"] instance=ExtResource("3_l37oo")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.7809, 0.077, 24.9769)
 
-[node name="Mob5Path" type="Path3D" parent="Mobs" groups=["ArenaMobs", "mob"]]
+[node name="Mob5Path" type="Path3D" parent="Mobs"]
 curve = SubResource("Curve3D_qpwj6")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Mobs/Mob5Path"]
@@ -513,7 +527,7 @@ transform = Transform3D(-0.0422662, 0.0200085, -0.998906, 2.79397e-09, 0.999796,
 [node name="Mob6" parent="Mobs" groups=["ArenaMobs"] instance=ExtResource("3_l37oo")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.7931, 0.077, 24.9769)
 
-[node name="Mob6Path" type="Path3D" parent="Mobs" groups=["ArenaMobs", "mob"]]
+[node name="Mob6Path" type="Path3D" parent="Mobs"]
 curve = SubResource("Curve3D_qpwj6")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Mobs/Mob6Path"]
@@ -535,5 +549,6 @@ light_energy = 2.0
 [node name="UserInterface" parent="." instance=ExtResource("2_g2h2n")]
 
 [node name="Player" parent="." instance=ExtResource("3_ra442")]
+speed = 18.0
 spawn_coords = Vector3(-37.589, 1.538, 42.167)
 transform = Transform3D(0.998458, 0, -0.0555078, 0, 1, 0, 0.0555078, 0, 0.998458, -37.589, 1.53849, 42.1674)

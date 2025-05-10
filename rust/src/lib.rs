@@ -1,4 +1,4 @@
-use godot::prelude::{gdextension, ExtensionLibrary};
+use godot::prelude::{ExtensionLibrary, gdextension};
 
 mod levels;
 mod main_scene;
