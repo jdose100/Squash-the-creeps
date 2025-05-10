@@ -75,7 +75,7 @@ impl IControl for UserInterface {
             current_language: &RU_LANGUAGE,
             max_score: 0,
             score: 0,
-            base,
+            base
         }
     }
 
