@@ -1,7 +1,7 @@
 [gd_scene load_steps=12 format=3 uid="uid://fxl4ba8g4ca3"]
 
 [ext_resource type="PackedScene" uid="uid://bicorb7we351t" path="res://art/mob.glb" id="1_4are2"]
-[ext_resource type="Material" path="res://art/mob_body.tres" id="3_71rcx"]
+[ext_resource type="Material" path="res://art/materials/mob_body.tres" id="3_71rcx"]
 [ext_resource type="AudioStream" uid="uid://ckv6ydxlsxnc1" path="res://art/mob_dead.wav" id="3_d4cuo"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_bsing"]

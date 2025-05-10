@@ -12,33 +12,34 @@ use godot::{
     prelude::*
 };
 
+/// Player class store a logic for control player and other.
 #[derive(GodotClass)]
 #[class(init, base = CharacterBody3D)]
 pub struct Player {
-    #[init(val = Vector3::ZERO)] /// velocity for player movement
+    #[init(val = Vector3::ZERO)] /// Velocity for player movement.
     target_velocity: Vector3,
 
-    #[init(val = false)] /// shield around player, if he active player can't die
+    #[init(val = false)] /// Shield around player, if he active player can't die.
     pub shield_active: bool,
     
-    #[init(val = true)] /// indicates whether the player is dead or not
+    #[init(val = true)] /// Indicates whether the player is dead or not.
     is_die: bool,
     
-    #[init(val = 75.0)] /// gravity for player
+    #[init(val = 75.0)] /// Gravity for player.
     #[export] pub fall_acceleration: f64,
 
-    /// vertical impulse applied to the character upon bouncing a mob in m/s
+    /// Vertical impulse applied to the character upon bouncing a mob, in m/s.
     #[init(val = 16.0)] 
     #[export] pub bounce_impulse: f64,
 
-    /// vertical impulse applied to the character upon jumping in m/s
+    /// Vertical impulse applied to the character upon jumping, in m/s.
     #[init(val = 20.0)]
     #[export] pub jump_impulse: f64,
 
-    #[init(val = 14.0)] /// how fast the player moves in m/s
+    #[init(val = 14.0)] /// How fast the player moves, in m/s.
     #[export] speed: f64, 
 
-    #[init(val = Vector3::ZERO)] /// position for spawn if player alive
+    #[init(val = Vector3::ZERO)] /// Position for spawn if player alive.
     #[export] spawn_coords: Vector3,
 
     base: Base<CharacterBody3D>
@@ -161,6 +162,12 @@ pub struct Player {
         // rotate
         self.base_mut().get_node_as::<Node3D>("Pivot")
             .set_rotation(rotation);
+
+        // ! NEXT CODE ONLY FOR DEVELOP!
+        // if player.y position < -10, then set player position to spawn_coords
+        if self.base().get_position().y < -10.0 {
+            self.kill();
+        }
     }
 }
 
@@ -182,9 +189,13 @@ pub struct Player {
     }
 
     /// Kill the player (from signal).
-    fn on_mob_detector_body_entered(&mut self, _body: Gd<Node3D>) {
+    fn on_mob_detector_body_entered(&mut self, _body: Gd<Node3D>) { 
+        self.kill(); 
+    }
+
+    /// Kill the player.
+    fn kill(&mut self) {
         if !self.is_die && !self.shield_active {
-            self.signals().hit().emit();
             self.is_die = true;
 
             // hide Pivot
@@ -196,6 +207,9 @@ pub struct Player {
             // emit DeadEffect
             self.base().get_node_as::<GpuParticles3D>("DeathEffect")
                 .set_emitting(true);
+
+            // emit signal
+            self.signals().hit().emit();
         }
     }
 }

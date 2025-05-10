@@ -6,7 +6,7 @@ reloadable = true
 [libraries]
 linux.debug.x86_64 =     "res://../rust/target/debug/libsquash_the_creeps.so"
 linux.release.x86_64 =   "res://../rust/target/release/libsquash_the_creeps.so"
-windows.debug.x86_64 =   "res://../rust/target/debug/squash_the_creeps.dll"
+windows.debug.x86_64 =   "res://../rust/target/x86_64-pc-windows-gnu/debug/squash_the_creeps.dll"
 windows.release.x86_64 = "res://../rust/target/release/squash_the_creeps.dll"
 macos.debug =            "res://../rust/target/debug/libsquash_the_creeps.dylib"
 macos.release =          "res://../rust/target/release/libsquash_the_creeps.dylib"

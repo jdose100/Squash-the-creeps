@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://dcfyhjm3032vn"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_o1xoh"]
+size = Vector3(0.939436, 0.88418, 0.930768)
+
+[sub_resource type="PrismMesh" id="PrismMesh_dysu1"]
+
+[node name="Spike" type="CharacterBody3D"]
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00391465, -0.0715821, -0.00957644)
+shape = SubResource("BoxShape3D_o1xoh")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("PrismMesh_dysu1")

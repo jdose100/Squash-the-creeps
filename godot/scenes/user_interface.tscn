@@ -126,3 +126,13 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_cufge")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_lmgon")
 shortcut = SubResource("Shortcut_jbsfc")
 text = "Start"
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 294.0
+offset_top = 471.0
+offset_right = 449.0
+offset_bottom = 530.0
+text = "В разработке!
+In develop!"
+horizontal_alignment = 1

@@ -23,11 +23,11 @@ pub enum Improvements {
 #[derive(GodotClass)]
 #[class(init, base = Node)]
 struct MainScene {
-    /// this field contain Mob scene for spawn creeps
+    /// This field contain Mob scene for spawn creeps.
     #[init(val = OnReady::from_loaded("res://scenes/mob.tscn"))]
     mob_scene: OnReady<Gd<PackedScene>>,
 
-    #[init(val = 1.0)] /// deceleration factor for creeps
+    #[init(val = 1.0)] /// Deceleration factor for creeps.
     slow_creeps: f64, 
 
     base: Base<Node>
@@ -89,10 +89,10 @@ struct MainScene {
             self.base().get_node_as::<Player>("Player").get_position();
         
         // initialize mob
-        mob.bind_mut().initialize(
-            mob_spawn_location.get_position(), 
-            player_position
-        );
+        // mob.bind_mut().initialize(
+        //     mob_spawn_location.get_position(), 
+        //     player_position
+        // );
 
         // we connect the mob to the score label to update the score
         // upon squashing one

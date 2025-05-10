@@ -1,14 +1,13 @@
 //! This file contain the Mob class for Godot.
 //! Mob is a enemy for player and mob can kill the player.
 
-use std::f64::consts::PI;
 use godot::{
     classes::{
-        AnimationPlayer, AudioStreamPlayer, CharacterBody3D, 
-        CollisionShape3D, GpuParticles3D, ICharacterBody3D, 
-        VisibleOnScreenNotifier3D
+        AnimationPlayer, AudioStreamPlayer, CharacterBody3D, CollisionShape3D, GpuParticles3D, 
+        ICharacterBody3D, Path3D, PathFollow3D, VisibleOnScreenNotifier3D
     }, 
     global::{randf_range, randi_range}, 
+    obj::WithBaseField, 
     prelude::*
 };
 
@@ -16,20 +15,35 @@ use godot::{
 #[derive(GodotClass)]
 #[class(init, base = CharacterBody3D)]
 pub struct Mob {
-    #[init(val = 1.0)] /// improvement for player
+    #[init(val = 1.0)] /// Improvement for player.
     pub slowdown: f64,
 
-    #[init(val = 10)] /// minimum speed of the mob in m/s
+    #[init(val = Vector3::ZERO)] /// Set 'self.position' to spawn_coords if mob alive.
+    pub spawn_coords: Vector3,
+
+    #[init(val = Vector3::ONE)] /// Set 'self.velocity' to spawn_velocity if mob alive.
+    pub spawn_velocity: Vector3,
+
+    #[init(val = 10)] /// Minimum speed of the mob, in m/s.
     #[export] pub min_speed: i64,
 
-    #[init(val = 18)] /// maximum speed of the mob in m/s
+    #[init(val = 18)] /// Maximum speed of the mob, in m/s.
     #[export] pub max_speed: i64,
 
-    #[init(val = 0.84)] /// minimum scale of the mob
+    #[init(val = 0.84)] /// Minimum scale of the mob.
     #[export] pub min_scale: f64,
 
-    #[init(val = 1.09)] /// maximum scale of the mob
+    #[init(val = 1.09)] /// Maximum scale of the mob.
     #[export] pub max_scale: f64,
+
+    #[init(val = None)] /// needs for move mob along the trajectory, depends on path!
+    follow_path: Option<Gd<PathFollow3D>>,
+
+    #[init(val = 0.1)] /// Speed for 'follow_path' and 'path'.
+    follow_speed: f64,
+
+    #[init(val = None)] /// Needs for move mob along the trajectory, depends on 'follow_path'!
+    path: Option<Gd<Path3D>>,
     
     base: Base<CharacterBody3D>
 } 
@@ -52,6 +66,29 @@ pub struct Mob {
     }
 
     fn physics_process(&mut self, _delta: f64) {
+        // moves the mob along the trajectory if possible
+        if let Some(mut follow_path) = self.follow_path.clone() {
+            // get path
+            let path = self.path.clone().unwrap();
+
+            // get oldest position
+            let old_position = self.base().get_position();
+
+            // calculate new position
+            let new_position = follow_path.get_position() + path.get_position();
+
+            // calculate rotation
+            self.base_mut().look_at_from_position(old_position, new_position);
+
+            // set new position
+            // self.base_mut().set_position(new_position);
+            self.base_mut().set_position(new_position);
+
+            // update ratio
+            let ratio = follow_path.get_progress() + self.follow_speed as f32;
+            follow_path.set_progress(ratio);
+        } 
+
         self.base_mut().move_and_slide();
     }
 }
@@ -59,10 +96,20 @@ pub struct Mob {
 #[godot_api] impl Mob {
     #[signal] pub fn squashed();
 
-    /// This function will be called from Main scene and need for init mob.
-    pub fn initialize(&mut self, start_pos: Vector3, player_pos: Vector3) {
-        self.base_mut()
-            .look_at_from_position(start_pos, player_pos);
+    /// This function will be called from BaseLevel and need for init mob.
+    pub fn initialize(
+        &mut self, 
+        follow_path: Option<Gd<PathFollow3D>>, 
+        path: Option<Gd<Path3D>>,
+        follow_speed: f64,
+    ) {
+        // set self variables
+        self.follow_speed = follow_speed;
+        self.follow_path = follow_path;
+        self.path = path;
+
+        // set spawn coords
+        self.spawn_coords = self.base().get_position();
 
         // set scale of the mob
         let scale_factor = randf_range(
@@ -72,32 +119,11 @@ pub struct Mob {
         self.base_mut().set_scale(Vector3::new(
             scale_factor, scale_factor, scale_factor
         ));
-
-        // rotate this mob randomly within range of -45 and +45 degrees,
-        // so that it doesn't move directly towards the player
-        self.base_mut()
-            .rotate_y(randf_range(-PI / 4.0, PI / 4.0) as f32);
         
-        // we calculate a random speed (in integer)
+        // we calculate a random speed
         let random_speed = randi_range(
             self.min_speed, self.max_speed
         ) as f32 / self.slowdown as f32;
-
-        // get velocity
-        #[allow(unused_assignments)]
-        let mut velocity = self.base().get_velocity();
-
-        // we calculate a forward velocity that represents the speed
-        velocity = Vector3::FORWARD * random_speed;
-
-        // we calculate a forward velocity vector based on the mob's
-        // Y rotation in order to move in the direction the mob is looking
-        velocity = velocity.rotated(
-            Vector3::UP, self.base().get_rotation().y
-        );
-
-        // set new velocity
-        self.base_mut().set_velocity(velocity);
 
         // set animation speed scale
         let mut animation = self.base()
@@ -130,11 +156,29 @@ pub struct Mob {
 
     /// Delete the mob if he leave from screen.
     fn on_visible_on_screen_notifier_3d_screen_exited(&mut self) {
-        self.base_mut().queue_free();
+        // ! self.base_mut().queue_free();
     }
 
     /// Delete the mob if dead effect finalize.
     fn on_dead_effect_finished(&mut self) {
-        self.base_mut().queue_free();
+        // ! self.base_mut().queue_free();
+    }
+
+    /// Alive mob.
+    pub fn alive(&mut self) {
+        // set velocity
+        let spawn_velocity = self.spawn_velocity;
+        self.base_mut().set_velocity(spawn_velocity);
+
+        // set position
+        let spawn_coords = self.spawn_coords;
+        self.base_mut().set_position(spawn_coords);
+
+        // enable collision shape
+        self.base().get_node_as::<CollisionShape3D>("CollisionShape3D")
+            .set_deferred("disabled", &Variant::from(false));
+
+        // show pivot
+        self.base().get_node_as::<Node3D>("Pivot").show();
     }
 }

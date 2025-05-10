@@ -12,7 +12,7 @@
             "debug_collisions": false,
             "debug_paths": false,
             "debug_navigation": false,
-            "preLaunchTask": "build: rust"
+            "preLaunchTask": "Build: Rust (linux)"
         }
     ]
 }

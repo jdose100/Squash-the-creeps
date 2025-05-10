@@ -4,13 +4,25 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build: rust",
+            "label": "Build: Rust (linux)",
             "type": "shell",
             "command": "cargo",
             "args": [
                 "build",
                 "--manifest-path",
                 "${workspaceFolder}/rust/Cargo.toml"
+            ]
+        },
+        {
+            "label": "Build: Rust (windows)",
+            "type": "shell",
+            "command": "cargo",
+            "args": [
+                "build",
+                "--manifest-path",
+                "${workspaceFolder}/rust/Cargo.toml",
+                "--target",
+                "x86_64-pc-windows-gnu"
             ]
         }
     ]
