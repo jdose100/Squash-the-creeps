@@ -429,6 +429,47 @@ sorting_use_aabb_center = false
 material_override = ExtResource("1_fiq81")
 mesh = SubResource("BoxMesh_qpwj6")
 
+[node name="EndOfLevelRoom" type="Node" parent="Objects/Walls"]
+
+[node name="Wall" type="StaticBody3D" parent="Objects/Walls/EndOfLevelRoom"]
+transform = Transform3D(-5.24537e-07, 0, 2, 0, 7.01, 0, -12, 0, -8.74228e-08, 21.6112, 3.05209, 35.3932)
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/Walls/EndOfLevelRoom/Wall"]
+shape = SubResource("BoxShape3D_l37oo")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/Walls/EndOfLevelRoom/Wall"]
+sorting_use_aabb_center = false
+material_override = ExtResource("1_fiq81")
+mesh = SubResource("BoxMesh_qpwj6")
+
+[node name="Wall2" type="StaticBody3D" parent="Objects/Walls/EndOfLevelRoom"]
+transform = Transform3D(-5.24537e-07, 0, 2, 0, 7.01, 0, -12, 0, -8.74228e-08, 10.181, 3.05209, 35.3327)
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/Walls/EndOfLevelRoom/Wall2"]
+shape = SubResource("BoxShape3D_l37oo")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/Walls/EndOfLevelRoom/Wall2"]
+sorting_use_aabb_center = false
+material_override = ExtResource("1_fiq81")
+mesh = SubResource("BoxMesh_qpwj6")
+
+[node name="Wall3" type="StaticBody3D" parent="Objects/Walls/EndOfLevelRoom"]
+transform = Transform3D(10, 0, 0, 0, 7.01, 0, 0, 0, 2, 15.9683, 3.05209, 40.4078)
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/Walls/EndOfLevelRoom/Wall3"]
+shape = SubResource("BoxShape3D_l37oo")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/Walls/EndOfLevelRoom/Wall3"]
+sorting_use_aabb_center = false
+material_override = ExtResource("1_fiq81")
+mesh = SubResource("BoxMesh_qpwj6")
+
 [node name="BigWall" type="StaticBody3D" parent="Objects/Walls"]
 transform = Transform3D(-7.21781e-07, 0, 2, 0, 7.01, 0, -16.5124, 0, -8.74228e-08, -47.7782, 3.05209, 25.3606)
 collision_layer = 4

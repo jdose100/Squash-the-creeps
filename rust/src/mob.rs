@@ -40,7 +40,7 @@ pub struct Mob {
     #[export]
     pub max_scale: f64,
 
-    /// Indicates whether the mob is dead or not. 
+    /// Indicates whether the mob is dead or not.
     /// Need for scene logic.
     pub is_die: bool,
 

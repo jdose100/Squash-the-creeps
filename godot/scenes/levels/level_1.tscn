@@ -257,7 +257,7 @@ material_override = ExtResource("2_oc4kc")
 mesh = SubResource("BoxMesh_6iamk")
 
 [node name="Wall9" type="StaticBody3D" parent="Objets/Walls"]
-transform = Transform3D(-1.63061e-06, 0, 2, 0, 14.3174, 0, -37.3041, 0, -8.74228e-08, -39.0672, 8.00756, -21.0488)
+transform = Transform3D(-1.63061e-06, 0, 2, 0, 14.3174, 0, -37.3041, 0, -8.74228e-08, -38.5532, 8.00756, -21.0488)
 collision_layer = 4
 collision_mask = 0
 
@@ -309,7 +309,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.3031, 5.20864, -22.4628)
 curve = SubResource("Curve3D_x42e6")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Mobs/Mob1Path"]
-transform = Transform3D(0.999841, -0.000202346, -0.0173668, -7.2759e-12, 0.99993, -0.0116504, 0.0173679, 0.0116487, 0.999775, -11.9534, 0.822944, 6.38075)
+transform = Transform3D(0.99984, -0.000202346, -0.0173668, -7.2759e-12, 0.99993, -0.0116504, 0.0173679, 0.0116487, 0.999774, -11.9534, 0.822944, 6.38075)
 
 [node name="Mob2" parent="Mobs" instance=ExtResource("2_nsrm0")]
 transform = Transform3D(-0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, -0.866025, 32.6336, 1.47119, 10.302)
@@ -319,7 +319,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.6747, 0, 5.88224)
 curve = SubResource("Curve3D_6761a")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Mobs/Mob2Path"]
-transform = Transform3D(-0.883027, 0.00695446, 0.469269, -2.32831e-10, 0.999872, -0.0148184, -0.469321, -0.0130848, -0.88293, -15.0383, 0.722534, -5.96458)
+transform = Transform3D(-0.883027, 0.00695446, 0.469269, -2.32831e-10, 0.999871, -0.0148184, -0.469321, -0.0130848, -0.88293, -15.0383, 0.722534, -5.96458)
 
 [node name="Player" parent="." instance=ExtResource("1_6iamk")]
 speed = 18.0
