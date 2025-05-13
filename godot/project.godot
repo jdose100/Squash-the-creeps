@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="Squash the Creeps Rust"
+config/name="Deeps-Creeps"
 config/name_localized={
 "ru_RU": ""
 }

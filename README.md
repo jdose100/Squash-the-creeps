@@ -1,2 +1,2 @@
-# About "Squash the creeps"
-Squash the creeps - is a small game written on Rust and use Godot4 as engine
+# About "Deeps-Creeps"
+Deeps-Creeps - is a small game written on Rust and use Godot4 as engine
