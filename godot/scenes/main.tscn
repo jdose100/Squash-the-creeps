@@ -1,7 +1,6 @@
-[gd_scene load_steps=7 format=3 uid="uid://bebamint8ngrj"]
+[gd_scene load_steps=6 format=3 uid="uid://bebamint8ngrj"]
 
-[ext_resource type="AudioStream" uid="uid://ss5jwmenn5aq" path="res://art/music.mp3" id="1_sugp2"]
-[ext_resource type="PackedScene" uid="uid://bw1jjrtt5ug48" path="res://scenes/user_interface.tscn" id="2_jyhfs"]
+[ext_resource type="PackedScene" uid="uid://bw1jjrtt5ug48" path="res://scenes/user_interface/main_menu.tscn" id="2_jyhfs"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_sgp6g"]
 size = Vector3(60, 2, 60)
@@ -23,13 +22,7 @@ point_count = 4
 
 [node name="Main" type="MainScene"]
 
-[node name="BackgroundMusic" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("1_sugp2")
-volume_db = -15.0
-autoplay = true
-bus = &"Music"
-
-[node name="UserInterface" parent="." instance=ExtResource("2_jyhfs")]
+[node name="MainMenu" parent="." instance=ExtResource("2_jyhfs")]
 
 [node name="Sun" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -0.707107, 0.707107, 0, -0.707107, -0.707107, 0, 15, 0)
@@ -59,4 +52,4 @@ mesh = SubResource("BoxMesh_o5qli")
 curve = SubResource("Curve3D_sugp2")
 
 [node name="SpawnLocation" type="PathFollow3D" parent="SpawnPath"]
-transform = Transform3D(-0.996073, 0.00195933, 0.0885175, 2.32831e-10, 0.999748, -0.0221294, -0.0885398, -0.0220424, -0.995822, 23, 1, -22)
+transform = Transform3D(-0.996073, 0.00195932, 0.0885175, 2.32831e-10, 0.999745, -0.0221294, -0.0885398, -0.0220424, -0.995822, 23, 1, -22)

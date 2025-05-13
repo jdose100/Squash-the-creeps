@@ -1,69 +1,176 @@
-//! Store a logic for settings UI menu.
-use godot::{classes::Control, prelude::*};
+//! В данном файле находится логика работы UI с настройками игры. 
+//! Данный UI может менять настройки игры, но ответственность за
+//! сохранение настроек несет MainScene.
 
-/// Implementation for settings UI menu.
+use godot::{classes::{AudioServer, Button, ColorRect, HSlider, Label}, prelude::*};
+use super::{main_menu::MainMenu, translation::*};
+
+/// Реализация интерфейса настроек.
 #[derive(GodotClass)]
-#[class(init, internal, base = Node)]
-pub(super) struct SettingsUI {
-    /// Need for GodotClass, is ignored!
-    _base: Base<Node>,
-
-    /// Real base for this struct.
-    pub base: Option<Gd<Control>>,
+#[class(init, base = ColorRect)]
+pub(super) struct SettingsHUD {
+    base: Base<ColorRect>,
 }
 
-impl SettingsUI {
-    /// Return base for this struct.
-    fn base(&self) -> &Gd<Control> {
-        self.base.as_ref().unwrap()
+impl SettingsHUD { 
+    pub fn connect_main_menu_signals(&mut self, main: &Gd<MainMenu>) {
+        // * Подключаем кнопки для переключения языка.
+        self
+            .base()
+            .get_node_as::<Button>("LanguageSettings/SetLanguageRU")
+            .signals()
+            .pressed()
+            .connect_obj(main, Self::set_ru_language);
+
+        self
+            .base()
+            .get_node_as::<Button>("LanguageSettings/SetLanguageEN")
+            .signals()
+            .pressed()
+            .connect_obj(main, Self::set_en_language);
+
+        // * Сигналы для открытия разных меню.
+        self
+            .base()
+            .get_node_as::<Button>("LanguageSettingsButton")
+            .signals()
+            .pressed()
+            .connect_obj(self, Self::open_language_setting_menu);
+        
+        self
+            .base()
+            .get_node_as::<Button>("SoundSettingsButton")
+            .signals()
+            .pressed()
+            .connect_obj(self, Self::open_sound_setting_menu);
+
+        // * Сигнал для закрытия меню.
+        self
+            .base()
+            .get_node_as::<Button>("ExitButton")
+            .signals()
+            .pressed()
+            .connect_obj(main, MainMenu::close_settings_menu);
+
+        // * Сигналы для настройки звука.
+        self
+            .base()
+            .get_node_as::<HSlider>("SoundSettings/MusicVolumeHSlider")
+            .signals()
+            .value_changed()
+            .connect(Self::on_music_volume_slider_changed);
+        
+        self
+            .base()
+            .get_node_as::<HSlider>("SoundSettings/SoundEffectsVolumeHSlider")
+            .signals()
+            .value_changed()
+            .connect(Self::on_sound_effects_volume_slider_changed);
     }
 
-    /// Close all settings menu.
-    pub fn close_settings_menus(&mut self) {
-        // close language settings
-        self.base().get_node_as::<Node2D>("SettingsHUD/LanguageSettings").hide();
+    /// Переводит данный интерфейс на новый язык.
+    pub fn update_text_from_language(&self, language: &LanguageText) {
+        // * Обновляет настройки языка на новый язык.
+        self
+            .base()
+            .get_node_as::<Button>("LanguageSettingsButton")
+            .set_text(language.language_button);
 
-        // close sound settings
-        self.base().get_node_as::<Node2D>("SettingsHUD/SoundSettings").hide();
+        self
+            .base()
+            .get_node_as::<Label>("LanguageSettings/SetLanguageLabel")
+            .set_text(language.set_current_language);
+
+        self
+            .base()
+            .get_node_as::<Label>("LanguageSettings/CurrentLanguageLabel")
+            .set_text(
+                &format!("{}: {}", language.current_language, language.language.to_string())
+            );
+        
+        // * Обновляет настройки звука на новый язык.
+        self
+            .base()
+            .get_node_as::<Button>("SoundSettingsButton")
+            .set_text(language.sound_button);
+
+        self
+            .base()
+            .get_node_as::<Label>("SoundSettings/MusicVolumeLabel")
+            .set_text(language.music_volume);
+
+        self
+            .base()
+            .get_node_as::<Label>("SoundSettings/SoundEffectsVolumeLabel")
+            .set_text(language.sound_effect_volume);
+
+        // * Обновляем название меню и кнопку выходу на новый язык.
+        self
+            .base()
+            .get_node_as::<Label>("MenuName")
+            .set_text(language.settings);
+
+        self
+            .base()
+            .get_node_as::<Button>("ExitButton")
+            .set_text(language.exit)
     }
 
-    // * Logic for 'Sound Settings'.
-
-    /// Open sound settings menu.
-    pub fn on_sound_settings_button_pressed(&mut self) {
-        // close other opened menus
-        self.close_settings_menus();
-
-        // open sound menu
-        self.base().get_node_as::<Node2D>("SettingsHUD/SoundSettings").show();
+    /// Закрывает все открытые меню настроек.
+    pub fn close_all_settings_menus(&self) {
+        self.base().get_node_as::<Node2D>("LanguageSettings").hide();
+        self.base().get_node_as::<Node2D>("SoundSettings").hide();
     }
 
-    // * Logic for 'Language Settings'.
+    // * Логика для настроек звука.
 
-    /// Open language settings menu.
-    pub fn on_language_settings_button_pressed(&mut self) {
-        // close other opened menus
-        self.close_settings_menus();
-
-        // open language menu
-        self.base().get_node_as::<Node2D>("SettingsHUD/LanguageSettings").show();
+    /// Открываем меню настроек звука.
+    pub fn open_sound_setting_menu(&mut self) {
+        self.close_all_settings_menus();
+        self.base().get_node_as::<Node2D>("SoundSettings").show();
     }
 
-    /// Set RU language if button pressed.
-    pub fn on_ru_language_button_pressed(ui: &mut super::UserInterface) {
-        // set new language
-        ui.current_language = &super::RU_LANGUAGE; 
+    /// Изменяет громкость музыки, данные получаются от HSlider.
+    fn on_music_volume_slider_changed(volume_db: f64) {
+        let mut audio_server = AudioServer::singleton();
+        let bus_idx = audio_server.get_bus_index("Music");
+        audio_server.set_bus_volume_db(bus_idx, volume_db as f32);
+    }
 
-        // update UI to new language
+    /// Изменяет громкость звуковых эффектов, данные получаются от HSlider.
+    fn on_sound_effects_volume_slider_changed(volume_db: f64) {
+        let mut audio_server = AudioServer::singleton();
+        let bus_idx = audio_server.get_bus_index("SoundEffects");
+        audio_server.set_bus_volume_db(bus_idx, volume_db as f32);
+    }
+
+    // * Логика для настроек языка.
+
+    /// Открывает меню настроек языка.
+    pub fn open_language_setting_menu(&mut self) {
+        self.close_all_settings_menus();
+        self.base().get_node_as::<Node2D>("LanguageSettings").show();
+    }
+
+    /// Устанавливает язык на Русский.
+    pub fn set_ru_language(ui: &mut MainMenu) {
+        ui.current_language = &RU_LANGUAGE; 
         ui.update_text_from_language();
     }
 
-    /// Set EN language if button pressed
-    pub fn on_en_language_button_pressed(ui: &mut super::UserInterface) {
-        // set new language
-        ui.current_language = &super::EN_LANGUAGE;
-
-        // update UI to new language
+    /// Устанавливает язык на Английский.
+    pub fn set_en_language(ui: &mut MainMenu) {
+        ui.current_language = &EN_LANGUAGE;
         ui.update_text_from_language();
+    }
+
+    /// Открываем меню настроек.
+    pub fn open_settings_menu(&mut self) {
+        self.base_mut().show();
+    }
+
+    /// Закрывает меню настроек.
+    pub fn close_settings_menu(&mut self) {
+        self.base_mut().hide();
     }
 }

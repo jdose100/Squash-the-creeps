@@ -1,0 +1,94 @@
+[gd_scene load_steps=10 format=3 uid="uid://bw1jjrtt5ug48"]
+
+[ext_resource type="FontFile" uid="uid://cyxhh7ddkn62q" path="res://art/fonts/Montserrat-Medium.ttf" id="1_y1h3b"]
+[ext_resource type="PackedScene" uid="uid://cfsu11wvl7omy" path="res://scenes/user_interface/level_hud.tscn" id="2_edk11"]
+[ext_resource type="AudioStream" uid="uid://54bgxs2a18rk" path="res://art/click.wav" id="2_y1h3b"]
+[ext_resource type="PackedScene" uid="uid://rva8xjcld2wo" path="res://scenes/user_interface/settings.tscn" id="3_n0nnf"]
+
+[sub_resource type="Theme" id="Theme_jbsfc"]
+default_font = ExtResource("1_y1h3b")
+default_font_size = 22
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jbsfc"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_y1h3b"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cufge"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lmgon"]
+
+[node name="MainMenu" type="MainMenu"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_jbsfc")
+color = Color(0.333333, 0.47451, 0.290196, 0.137255)
+
+[node name="ClickSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_y1h3b")
+
+[node name="LevelHUD" parent="." instance=ExtResource("2_edk11")]
+visible = false
+layout_mode = 0
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+grow_horizontal = 1
+grow_vertical = 1
+
+[node name="SettingsHUD" parent="." instance=ExtResource("3_n0nnf")]
+visible = false
+layout_mode = 0
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+grow_horizontal = 1
+grow_vertical = 1
+
+[node name="NameOfGame" type="Label" parent="." groups=["main_menu"]]
+modulate = Color(0.976471, 0.313726, 0.133333, 1)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -104.0
+offset_top = -86.0
+offset_right = 57.0
+offset_bottom = -58.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.44, 1.36)
+theme_override_colors/font_color = Color(0.807843, 0.14902, 1, 1)
+theme_override_colors/font_shadow_color = Color(0.317647, 0, 0, 1)
+text = "Deeps-Creeps"
+
+[node name="SettingsButton" type="Button" parent="." groups=["main_menu"]]
+modulate = Color(0.964706, 0, 0.211765, 1)
+layout_mode = 0
+offset_left = 288.0
+offset_top = 336.0
+offset_right = 452.0
+offset_bottom = 388.0
+theme_type_variation = &"FlatButton"
+theme_override_constants/outline_size = 5
+theme_override_styles/focus = SubResource("StyleBoxEmpty_jbsfc")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_y1h3b")
+action_mode = 0
+text = "Settings"
+
+[node name="StartButton" type="Button" parent="." groups=["main_menu"]]
+modulate = Color(0.964706, 0, 0.211765, 1)
+layout_mode = 0
+offset_left = 296.0
+offset_top = 256.0
+offset_right = 441.0
+offset_bottom = 308.0
+theme_type_variation = &"FlatButton"
+theme_override_constants/outline_size = 4
+theme_override_styles/focus = SubResource("StyleBoxEmpty_cufge")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_lmgon")
+text = "Start"

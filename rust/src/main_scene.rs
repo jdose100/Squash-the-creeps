@@ -1,19 +1,17 @@
-//! In this file stored all logic, classes, struct and enums for Main scene.
+//! В данном модуля расположена реализация `MainScene`.
+//! Задачи и зоны ответственности `MainScene`:
+//!     * Работа с файлами - отвечает за сохранение и чтение данных в файлах (сохранение прогресса/настроек).
+//!     * Запуск уровней - отвечает за запуск уровней игры.
+//!     * Взаимодействие с UI - взаимодействует с UI частью, предназначенной для `MainScene`.
 
-use crate::{player::Player, ui::UserInterface};
+use crate::ui::main_menu::MainMenu;
 use godot::{
-    classes::{AudioServer, AudioStream, AudioStreamPlayer, HSlider, Marker3D},
+    classes::Button,
     obj::WithBaseField,
     prelude::*,
 };
 
-/// This enum store all improvements for player.
-/// He need for update UI.
-pub enum Improvements {
-    None,
-}
-
-/// This class store logic for Main scene.
+// Данный класс содержит реализацию логики работы `MainScene`.
 #[derive(GodotClass)]
 #[class(base = Node)]
 struct MainScene {
@@ -28,52 +26,32 @@ impl INode for MainScene {
         }
     }
 
-    fn ready(&mut self) { 
-        // connect signal for setup music volume
-        self.base()
-            .get_node_as::<UserInterface>("UserInterface")
-            .get_node_as::<HSlider>("SettingsHUD/SoundSettings/MusicVolumeHSlider")
+    fn ready(&mut self) {
+        // Получаем пользовательский интерфейс.
+        let main_menu = self.base().get_node_as::<MainMenu>("MainMenu");
+        
+        // * Подключаем сигналы UI для старта уровней.
+
+        // Для 1 уровня.
+        main_menu
+            .get_node_as::<Button>("LevelHUD/Level1Button")
             .signals()
-            .value_changed()
-            .connect_obj(self, Self::on_music_volume_slider_changed);
+            .pressed()
+            .connect_obj(self, |this: &mut Self| {
+                this.base().get_node_as::<MainMenu>("MainMenu").bind_mut().start_new_game();
+                this.base().get_tree().unwrap().change_scene_to_file("res://scenes/levels/level_1.tscn")
+            });
 
-        // connect signal for setup sound effects volume
-        self.base()
-            .get_node_as::<UserInterface>("UserInterface")
-            .get_node_as::<HSlider>("SettingsHUD/SoundSettings/SoundEffectsVolumeHSlider")
+        // Для 2 уровня.
+        main_menu
+            .get_node_as::<Button>("LevelHUD/Level2Button")
             .signals()
-            .value_changed()
-            .connect_obj(self, Self::on_sound_effects_volume_slider_changed);
-
-        // start music
-        self.base()
-            .get_node_as::<AudioStreamPlayer>("BackgroundMusic")
-            .play();
-    }
-
-    fn process(&mut self, _delta: f64) {
+            .pressed()
+            .connect_obj(self, |this: &mut Self| {
+                this.base().get_node_as::<MainMenu>("MainMenu").bind_mut().start_new_game();
+                this.base().get_tree().unwrap().change_scene_to_file("res://scenes/levels/level_2.tscn")
+            });
     }
 }
 
-#[godot_api]
-impl MainScene {
-    /// Change music volume from HSlider.
-    fn on_music_volume_slider_changed(&mut self, volume_db: f64) {
-        // get audio server
-        let mut audio_server = AudioServer::singleton();
-
-        // set new sound volume
-        let bus_idx = audio_server.get_bus_index("Music");
-        audio_server.set_bus_volume_db(bus_idx, volume_db as f32);
-    }
-
-    /// Change sound effects volume from HSlider
-    fn on_sound_effects_volume_slider_changed(&mut self, volume_db: f64) {
-        // get audio server
-        let mut audio_server = AudioServer::singleton();
-
-        // set new sound volume
-        let bus_idx = audio_server.get_bus_index("SoundEffects");
-        audio_server.set_bus_volume_db(bus_idx, volume_db as f32);
-    }
-}
+impl MainScene {}

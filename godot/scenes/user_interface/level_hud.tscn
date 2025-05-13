@@ -1,0 +1,107 @@
+[gd_scene load_steps=6 format=3 uid="uid://cfsu11wvl7omy"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vyvbu"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_pyisr"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vlfcw"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cffdv"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_x7x40"]
+
+[node name="LevelHUD" type="ColorRect"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.333333, 0.47451, 0.290196, 0.137255)
+
+[node name="MenuName" type="Label" parent="."]
+layout_mode = 0
+offset_left = 320.0
+offset_top = 48.0
+offset_right = 407.0
+offset_bottom = 76.0
+text = "Levels"
+
+[node name="Level1Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 112.0
+offset_top = 120.0
+offset_right = 182.0
+offset_bottom = 190.0
+theme_override_styles/focus = SubResource("StyleBoxEmpty_vyvbu")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_pyisr")
+text = "1"
+
+[node name="Level2Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 256.0
+offset_top = 120.0
+offset_right = 326.0
+offset_bottom = 190.0
+theme_override_styles/focus = SubResource("StyleBoxEmpty_vlfcw")
+text = "2"
+
+[node name="Level3Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 400.0
+offset_top = 120.0
+offset_right = 470.0
+offset_bottom = 190.0
+theme_override_styles/focus = SubResource("StyleBoxEmpty_cffdv")
+text = "X"
+
+[node name="Level4Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 544.0
+offset_top = 120.0
+offset_right = 614.0
+offset_bottom = 190.0
+theme_override_styles/focus = SubResource("StyleBoxEmpty_x7x40")
+text = "X"
+
+[node name="Level5Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 112.0
+offset_top = 312.0
+offset_right = 182.0
+offset_bottom = 382.0
+theme_override_styles/focus = SubResource("StyleBoxEmpty_vyvbu")
+text = "X"
+
+[node name="Level6Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 256.0
+offset_top = 312.0
+offset_right = 326.0
+offset_bottom = 382.0
+theme_override_styles/focus = SubResource("StyleBoxEmpty_vlfcw")
+text = "X"
+
+[node name="Level7Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 400.0
+offset_top = 312.0
+offset_right = 470.0
+offset_bottom = 382.0
+theme_override_styles/focus = SubResource("StyleBoxEmpty_cffdv")
+text = "X"
+
+[node name="Level8Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 544.0
+offset_top = 312.0
+offset_right = 614.0
+offset_bottom = 382.0
+theme_override_styles/focus = SubResource("StyleBoxEmpty_x7x40")
+text = "X"
+
+[node name="ExitButton" type="Button" parent="."]
+layout_mode = 0
+offset_top = 504.0
+offset_right = 61.0
+offset_bottom = 540.0
+text = "Выход"

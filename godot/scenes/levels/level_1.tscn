@@ -1,10 +1,10 @@
 [gd_scene load_steps=17 format=3 uid="uid://be2gdbtar7tb7"]
 
-[ext_resource type="PackedScene" uid="uid://cwevoa4jfecwe" path="res://scenes/objecst/player.tscn" id="1_6iamk"]
-[ext_resource type="PackedScene" uid="uid://dcfyhjm3032vn" path="res://scenes/objecst/spike.tscn" id="1_sk5k4"]
-[ext_resource type="PackedScene" uid="uid://fxl4ba8g4ca3" path="res://scenes/objecst/mob.tscn" id="2_nsrm0"]
+[ext_resource type="PackedScene" uid="uid://cwevoa4jfecwe" path="res://scenes/objects/player.tscn" id="1_6iamk"]
+[ext_resource type="PackedScene" uid="uid://dcfyhjm3032vn" path="res://scenes/objects/spike.tscn" id="1_sk5k4"]
+[ext_resource type="PackedScene" uid="uid://fxl4ba8g4ca3" path="res://scenes/objects/mob.tscn" id="2_nsrm0"]
 [ext_resource type="Material" uid="uid://c0cp1qoswa4to" path="res://art/materials/wall.tres" id="2_oc4kc"]
-[ext_resource type="PackedScene" uid="uid://bw1jjrtt5ug48" path="res://scenes/user_interface.tscn" id="4_6761a"]
+[ext_resource type="PackedScene" uid="uid://bw1jjrtt5ug48" path="res://scenes/user_interface/main_menu.tscn" id="4_6761a"]
 [ext_resource type="Material" uid="uid://dxpx4g1p0a2yj" path="res://art/materials/grass.tres" id="4_x42e6"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ksju7"]

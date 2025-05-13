@@ -2,10 +2,10 @@
 
 [ext_resource type="Material" uid="uid://c0cp1qoswa4to" path="res://art/materials/wall.tres" id="1_fiq81"]
 [ext_resource type="Material" uid="uid://dxpx4g1p0a2yj" path="res://art/materials/grass.tres" id="1_j2425"]
-[ext_resource type="PackedScene" uid="uid://dcfyhjm3032vn" path="res://scenes/objecst/spike.tscn" id="1_qpwj6"]
-[ext_resource type="PackedScene" uid="uid://bw1jjrtt5ug48" path="res://scenes/user_interface.tscn" id="2_g2h2n"]
-[ext_resource type="PackedScene" uid="uid://fxl4ba8g4ca3" path="res://scenes/objecst/mob.tscn" id="3_l37oo"]
-[ext_resource type="PackedScene" uid="uid://cwevoa4jfecwe" path="res://scenes/objecst/player.tscn" id="3_ra442"]
+[ext_resource type="PackedScene" uid="uid://dcfyhjm3032vn" path="res://scenes/objects/spike.tscn" id="1_qpwj6"]
+[ext_resource type="PackedScene" uid="uid://bw1jjrtt5ug48" path="res://scenes/user_interface/main_menu.tscn" id="2_g2h2n"]
+[ext_resource type="PackedScene" uid="uid://fxl4ba8g4ca3" path="res://scenes/objects/mob.tscn" id="3_l37oo"]
+[ext_resource type="PackedScene" uid="uid://cwevoa4jfecwe" path="res://scenes/objects/player.tscn" id="3_ra442"]
 [ext_resource type="Material" uid="uid://c52akaeps0aid" path="res://art/materials/platform.tres" id="4_ibugp"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_qpwj6"]
@@ -302,7 +302,7 @@ collision_mask = 0
 shape = SubResource("BoxShape3D_l37oo")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/Walls/RoomWithFirstMob/Wall"]
-transform = Transform3D(0.759706, 0, 0, 0, 0.999999, 0, 0, 0, 1, -0.118568, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.118568, 0, 0)
 sorting_use_aabb_center = false
 material_override = ExtResource("1_fiq81")
 mesh = SubResource("BoxMesh_qpwj6")
@@ -424,7 +424,7 @@ collision_mask = 0
 shape = SubResource("BoxShape3D_l37oo")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/Walls/Arena/Wall3"]
-transform = Transform3D(0.759706, 0, 0, 0, 0.999999, 0, 0, 0, 1, -0.118568, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.118568, 0, 0)
 sorting_use_aabb_center = false
 material_override = ExtResource("1_fiq81")
 mesh = SubResource("BoxMesh_qpwj6")
@@ -471,7 +471,7 @@ material_override = ExtResource("1_fiq81")
 mesh = SubResource("BoxMesh_qpwj6")
 
 [node name="BigWall" type="StaticBody3D" parent="Objects/Walls"]
-transform = Transform3D(-7.21781e-07, 0, 2, 0, 7.01, 0, -16.5124, 0, -8.74228e-08, -47.7782, 3.05209, 25.3606)
+transform = Transform3D(-2.25939e-06, 0, 2.56516, 0, 8.99089, 0, -51.6888, 0, -1.12127e-07, -47.7782, 3.05209, 21.7702)
 collision_layer = 4
 collision_mask = 0
 
@@ -479,7 +479,6 @@ collision_mask = 0
 shape = SubResource("BoxShape3D_l37oo")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/Walls/BigWall"]
-transform = Transform3D(3.07977, 0, 4.44089e-16, 0, 1, 0, -3.41061e-13, 0, 1, 0.187109, 0, 0)
 sorting_use_aabb_center = false
 material_override = ExtResource("1_fiq81")
 mesh = SubResource("BoxMesh_qpwj6")
@@ -497,7 +496,7 @@ material_override = ExtResource("1_j2425")
 mesh = SubResource("BoxMesh_ra442")
 
 [node name="Door" type="StaticBody3D" parent="Objects" groups=["door"]]
-transform = Transform3D(7, 0, 0, 0, 7, 0, 0, 0, 1, 16.2152, 3.05209, 28.8415)
+transform = Transform3D(7, 0, 0, 0, 7, 0, 0, 0, 1, 16.2152, 2.98152, 28.8415)
 collision_layer = 4
 collision_mask = 0
 
@@ -508,6 +507,15 @@ shape = SubResource("BoxShape3D_l37oo")
 sorting_use_aabb_center = false
 material_override = ExtResource("4_ibugp")
 mesh = SubResource("BoxMesh_qpwj6")
+
+[node name="Exit" type="StaticBody3D" parent="Objects" groups=["door"]]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 16.2152, 4.42781, 28.5907)
+collision_layer = 8
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/Exit"]
+transform = Transform3D(0.999999, 0, 0, 0, 0.999999, 0, 0, 0, 1, 0, 0, 1.00177)
+shape = SubResource("BoxShape3D_l37oo")
 
 [node name="Mobs" type="Node" parent="."]
 
@@ -587,7 +595,7 @@ size = 19.0
 transform = Transform3D(1, 0, 0, 0, -0.707107, 0.707107, 0, -0.707107, -0.707107, 0, 58.1464, 0)
 light_energy = 2.0
 
-[node name="UserInterface" parent="." instance=ExtResource("2_g2h2n")]
+[node name="MainMenu" parent="." instance=ExtResource("2_g2h2n")]
 
 [node name="Player" parent="." instance=ExtResource("3_ra442")]
 speed = 18.0

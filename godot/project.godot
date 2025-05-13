@@ -16,11 +16,16 @@ config/name_localized={
 }
 config/description="In this game, your goal is to chase and kick out the creeps!"
 config/version="0.0.1"
-run/main_scene="uid://be2gdbtar7tb7"
+run/main_scene="uid://bebamint8ngrj"
 config/features=PackedStringArray("4.4")
 config/icon="res://icon.webp"
 config/macos_native_icon="uid://nev7b6ohgeo"
 config/windows_native_icon="uid://nev7b6ohgeo"
+
+[autoload]
+
+MusicPlayer="*res://scenes/music_player.tscn"
+DevelopLabel="*res://scenes/develop_label.tscn"
 
 [debug]
 
@@ -32,8 +37,7 @@ file_logging/log_path="res://logs/godot.log"
 
 window/size/viewport_width=720
 window/size/viewport_height=540
-window/stretch/mode="viewport"
-window/stretch/aspect="ignore"
+window/size/resizable=false
 
 [dotnet]
 
@@ -80,6 +84,7 @@ jump={
 3d_physics/layer_1="player"
 3d_physics/layer_2="enemies"
 3d_physics/layer_3="word"
+3d_physics/layer_4="level_exit"
 
 [rendering]
 

@@ -1,7 +1,9 @@
-//! This module store all logic for levels and 'BaseLevel' class.
+//! Данный модуль содержит логику уровней.
+//! BaseLevel - это класс, который реализует минимум функций для работы уровня,
+//! является полностью самостоятельным. Подмодули же содержат доп. логику, а 
+//! BaseLevel в этом случае выступает в качестве родителя.
 
-// import decencies
-use crate::{mob::Mob, player::Player, ui::UserInterface};
+use crate::{mob::Mob, player::Player, ui::main_menu::MainMenu};
 use godot::{
     classes::{Label, Marker3D, Path3D, PathFollow3D},
     global::randf_range,
@@ -9,18 +11,18 @@ use godot::{
     prelude::*,
 };
 
-// modules for external level logic
 mod level2;
 
-/// Base logic for levels.
+/// Класс, реализующий минимальную логику
+/// для самостоятельности уровня.
 #[derive(GodotClass)]
 #[class(base = Node)]
 struct BaseLevel {
-    /// How much mobs on level.
+    /// Как много мобов на уровне.
     #[export]
     all_mobs_on_level: i64,
 
-    /// How much mobs squashed.
+    /// Сколько мобов было убито на уровне.
     squashed_mobs: i64,
 
     base: Base<Node>,
@@ -37,10 +39,9 @@ impl INode for BaseLevel {
     }
 
     fn ready(&mut self) {
-        // init this node
         Self::init_node(&self.base());
 
-        // init all mobs
+        // Инициализируем всех мобов.
         Self::default_mobs_init(
             &self.base(),
             self.all_mobs_on_level,
@@ -51,7 +52,6 @@ impl INode for BaseLevel {
             }
         );
 
-        // connect 'hit' signal from player
         self.base()
             .get_node_as::<Player>("Player")
             .signals()
@@ -68,56 +68,44 @@ impl INode for BaseLevel {
 
 #[godot_api]
 impl BaseLevel {
-    /// Setup player and IU with BaseLevel parameters, need for delete
-    /// boilerplate code in child classes.
+    /// Настраивает игрока и IU с параметрами BaseLevel, 
+    /// необходим для удаления шаблонного кода в дочерних классах. 
     pub fn init_node<T: GodotClass + INode>(node: &BaseRef<T>) {
-        // setup player if is exists
         if let Some(mut player) = node.try_get_node_as::<Player>("Player") {
-            // alive player
             player.bind_mut().alive();
         }
 
-        // setup UI if is exists
-        if let Some(mut ui) = node.try_get_node_as::<UserInterface>("UserInterface") {
+        if let Some(mut ui) = node.try_get_node_as::<MainMenu>("UserInterface") {
             ui.bind_mut().start_new_game();
         }
     }
 
-    /// Init and call 'method' for all mobs in scene specified by the counter.
+    /// Инициировать и вызвать «метод» для всех мобов в сцене, указанных счетчиком. 
     pub fn default_mobs_init<T, F>(node: &BaseRef<T>, mob_count: i64, method: F)
     where
         T: GodotClass + INode + Inherits<Node>,
         F: Fn(&Gd<T>, &mut Gd<Mob>),
     {
-        // cycle of all mobs in mob_count
         for i in 0..mob_count {
-            // get mob from scene
             let mob = node.try_get_node_as::<Mob>(&get_text_mob_name(i));
 
-            // check mob is exits or not
             if let Some(mut mob) = mob {
-                // if mob exits then connect signal
                 method(&node.to_godot().cast(), &mut mob);
 
                 //* The following code is needed to be able to move along a given path!
 
-                // get follow path
                 let follow_path =
                     node.try_get_node_as::<PathFollow3D>(&get_text_mob_follow_path(i));
 
-                // get path
                 let path = node.try_get_node_as::<Path3D>(&get_text_mob_path(i));
-
-                // get speed
                 let follow_speed = randf_range(0.1, 0.34);
 
-                // init mob
                 mob.bind_mut().initialize(follow_path, path, follow_speed);
             }
         }
     }
 
-    /// Update 'squashed_mobs' on mob squashed and play sound if all mobs in level squashed
+    /// Обновляет «squashed_mobs» для раздавленных мобов, если все мобы на уровне раздавлены. 
     fn on_mob_squashed(&mut self) {
         self.squashed_mobs += 1;
 
@@ -125,10 +113,10 @@ impl BaseLevel {
             // TODO
             godot_print!("all mob squashed!");
 
-            //* for visual output, only on develop!
+            //* Для визуального вывода, ТОЛЬКО ДЛЯ РАЗРАБОТКИ!
             let mut label = self
                 .base()
-                .get_node_as::<UserInterface>("UserInterface")
+                .get_node_as::<MainMenu>("UserInterface")
                 .get_node_as::<Label>("Improvement");
 
             label.show();
@@ -136,15 +124,15 @@ impl BaseLevel {
         }
     }
 
-    /// auto alive for player,
-    // ! ONLY FOR DEVELOP!
+    /// Авто оживление игрока.
+    // ! ТОЛЬКО ДЛЯ РАЗРАБОТКИ!
     fn on_player_hit(&mut self) {
         self.base()
             .get_node_as::<Player>("Player")
             .bind_mut()
             .alive();
 
-        // alive all mobs
+        // Оживляет всех мобов.
         for i in 0..self.all_mobs_on_level {
             let mob = self.base().try_get_node_as::<Mob>(&format!("Mobs/Mob{i}"));
 
@@ -153,12 +141,10 @@ impl BaseLevel {
             }
         }
 
-        // set squashed mobs to zero
         self.squashed_mobs = 0;
 
-        // hide label
         self.base()
-            .get_node_as::<UserInterface>("UserInterface")
+            .get_node_as::<MainMenu>("UserInterface")
             .get_node_as::<Label>("Improvement")
             .hide();
     }
