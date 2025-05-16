@@ -1,0 +1,123 @@
+[gd_scene load_steps=7 format=3 uid="uid://gygb8mwr6f2g"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_dgui5"]
+size = Vector3(0.5, 0.5, 0.5)
+
+[sub_resource type="PrismMesh" id="PrismMesh_o3wln"]
+size = Vector3(0.3, 0.3, 0.3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_dgui5"]
+size = Vector3(0.554932, 1.24554, 0.562195)
+
+[sub_resource type="Animation" id="Animation_dgui5"]
+resource_name = "new_animation"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Center:rotation")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0.785398, 0), Vector3(0, 1.5708, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Up:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0.785398, 0), Vector3(0, -0.785398, 0), Vector3(0, -2.35619, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Down:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.500243, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, -0.785398, 3.14159), Vector3(0, 0.785398, 3.14159), Vector3(0, 2.35619, 3.14159)]
+}
+
+[sub_resource type="Animation" id="Animation_o3wln"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Center:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0.785398, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Up:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0.785398, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Down:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, -0.785398, 3.14159)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_t43a5"]
+_data = {
+&"RESET": SubResource("Animation_o3wln"),
+&"new_animation": SubResource("Animation_dgui5")
+}
+
+[node name="Exit" type="Node3D"]
+
+[node name="Center" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 0, 0, 0)
+mesh = SubResource("BoxMesh_dgui5")
+
+[node name="Up" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 0, 0.490063, 0)
+mesh = SubResource("PrismMesh_o3wln")
+
+[node name="Down" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.707107, 6.18172e-08, -0.707107, -8.74228e-08, -1, 0, -0.707107, 6.18172e-08, 0.707107, 0, -0.487587, 0)
+mesh = SubResource("PrismMesh_o3wln")
+
+[node name="CharacterBody3D" type="CharacterBody3D" parent="."]
+collision_layer = 8
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00646973, 0.0301819, -0.00259399)
+shape = SubResource("BoxShape3D_dgui5")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_t43a5")
+}
+autoplay = "new_animation"

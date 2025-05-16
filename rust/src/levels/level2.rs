@@ -2,7 +2,7 @@
 //! в том случае, если все мобы из группы 'ArenaMobs' мертвы.
 
 use godot::{
-    classes::{Area3D, InputEvent, Marker3D},
+    classes::{CollisionShape3D, InputEvent, Marker3D},
     prelude::*,
 };
 
@@ -47,16 +47,12 @@ impl INode for Level2 {
             );
 
         // Инициализируем уровень.
-        BaseLevel::init_node(&self.base(), self.mobs.clone(), self.base().get_scene_file_path());
-
-        // подключаем сигнал для выхода с уровня.
-        self
-            .base()
-            .get_node_as::<Player>("Player")
-            .get_node_as::<Area3D>("ExitDetector")
-            .signals()
-            .body_entered()
-            .connect_obj(self, Self::on_exit_body_entered);
+        BaseLevel::init_node(
+            &self.base(), 
+            self.mobs.clone(), 
+            self.base().get_scene_file_path(), 
+            2
+        );
 
         // Подключаем 'hit' сигнал игрока.
         self.base()
@@ -64,6 +60,11 @@ impl INode for Level2 {
             .signals()
             .hit()
             .connect_obj(self, Self::on_player_hit);
+
+        self.base().get_node_as::<Node3D>("Objects/Exit").show();
+        self.base().get_node_as::<CollisionShape3D>(
+            "Objects/Exit/CharacterBody3D/CollisionShape3D"
+        ).set_disabled(false);
     }
 
     fn process(&mut self, _delta: f64) {
@@ -81,15 +82,19 @@ impl INode for Level2 {
 
 #[godot_api]
 impl Level2 {
-    fn on_exit_body_entered(&mut self, _body: Gd<Node3D>) {
-        self.base().get_tree().unwrap().change_scene_to_file("res://scenes/main.tscn");
-    }
-
     fn on_player_hit(&mut self) {
-        self.base()
+        self
+            .base()
             .get_node_as::<Player>("Player")
             .bind_mut()
             .alive();
+
+        self.base().get_node_as::<Node3D>("Objects/Exit").show();
+        
+        self
+            .base()
+            .get_node_as::<CollisionShape3D>("Objects/Exit/CharacterBody3D")
+            .set_disabled(false);
     }
 
     fn on_mob_squashed(&mut self) {

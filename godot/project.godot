@@ -29,7 +29,6 @@ DevelopLabel="*res://scenes/global/develop_label.tscn"
 
 [debug]
 
-settings/stdout/print_fps=true
 file_logging/enable_file_logging=true
 file_logging/log_path="res://logs/godot.log"
 

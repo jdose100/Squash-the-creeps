@@ -8,8 +8,13 @@ use crate::ui::translation::{LanguageText, Languages, EN_LANGUAGE, RU_LANGUAGE};
 use std::fs::File;
 use std::io::Read;
 use std::env;
-use std::os::unix::fs::FileExt;
 use std::sync::{LazyLock, Mutex};
+
+#[cfg(target_os = "linux")]
+use std::os::unix::fs::FileExt;
+
+#[cfg(target_os = "windows")]
+use std::os::windows::fs::FileExt;
 
 use godot::classes::AudioServer;
 use godot::global::godot_error;
@@ -27,7 +32,7 @@ pub struct Settings {
 /// Данная структуры содержит данные о прогрессе игрока.
 #[derive(Serialize, Deserialize, Clone, Copy, Debug)]
 pub struct GameProgress {
-    pub max_level: i64
+    pub max_level: u64
 }
 
 /// Данная структура содержит реализацию конфига.
@@ -43,12 +48,14 @@ impl ConfigData {
     fn new() -> Result<Self, std::io::Error> {
         let file_path: String;
         
-        if cfg!(debug_assertions) && cfg!(target_os = "linux") {
-            file_path = "/home/user/code/godot/squash_the_creeps_rust/config.json".to_string();
-        } else {
-            file_path = 
-                env::current_exe().unwrap().parent().unwrap().to_str().unwrap().to_string() + "/config.json";
-        }
+        // if cfg!(debug_assertions) && cfg!(target_os = "linux") {
+        //     file_path = "/home/user/code/godot/squash_the_creeps_rust/config.json".to_string();
+        // } else {
+        //     file_path = 
+        //         env::current_exe().unwrap().parent().unwrap().to_str().unwrap().to_string() + "/config.json";
+        // }
+
+        file_path = env::current_exe().unwrap().parent().unwrap().to_str().unwrap().to_string() + "/config.json";
 
         // Структура для получения данных из файла.
         #[derive(Deserialize, Debug)]
@@ -119,7 +126,16 @@ impl ConfigData {
         // Записываем в файл данные.
         if let Err(error) = self.file.set_len(0) {
             godot_error!("Can't set file data to zero! Error: {error:?}");
-        } else if let Err(error) = self.file.write_all_at(write_data.as_bytes(), 0) {
+            return;
+        } 
+
+        #[cfg(target_os = "linux")]
+        let result = self.file.write_all_at(write_data.as_bytes(), 0);
+
+        #[cfg(target_os = "windows")]
+        let result = self.file.seek_write(write_data.as_bytes(), 0);
+        
+        if let Err(error) = result {
             godot_error!(
                 "Error write data to {}: {error:?}", 
                 env::current_exe().unwrap().parent().unwrap().to_str().unwrap().to_string() + "/config"

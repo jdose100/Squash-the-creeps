@@ -4,9 +4,10 @@
 //! BaseLevel в этом случае выступает в качестве родителя.
 
 
-use crate::{mob::Mob, player::Player, ui::settings::SettingsHUD};
+use crate::{config::CONFIG, mob::Mob, player::Player, ui::{pause_menu::PauseMenu, settings::SettingsHUD}};
+use end_of_level::HowPlayerExitedFromLevel;
 use godot::{
-    classes::{Button, ColorRect, InputEvent, Label, Marker3D, Path3D, PathFollow3D}, 
+    classes::{Area3D, Button, CollisionShape3D, ColorRect, InputEvent, Marker3D, Path3D, PathFollow3D}, 
     global::randf_range, 
     obj::{bounds::DeclUser, BaseRef, Bounds, WithBaseField}, 
     prelude::*
@@ -59,7 +60,7 @@ impl INode for BaseLevel {
             );
 
         // Инициализируем уровень.
-        Self::init_node(&self.base(), self.mobs.clone(), self.base().get_scene_file_path());
+        Self::init_node(&self.base(), self.mobs.clone(), self.base().get_scene_file_path(), 1);
 
         self.base()
             .get_node_as::<Player>("Player")
@@ -96,16 +97,42 @@ impl BaseLevel {
     pub fn init_node<T>(
         node: &BaseRef<T>, 
         mut mobs: Vec<Gd<Mob>>,
-        path: GString
+        path: GString,
+        num_of_level: u64,
     ) 
     where
         T: GodotClass + INode + Bounds<Declarer = DeclUser> + Inherits<Node> + WithBaseField
     {
         if let Some(mut player) = node.try_get_node_as::<Player>("Player") {
             player.bind_mut().alive();
+            
+            node.get_node_as::<CollisionShape3D>(
+                "Objects/Exit/CharacterBody3D/CollisionShape3D"
+            ).set_disabled(true);
+            node.get_node_as::<Node3D>("Objects/Exit").hide();
+
+            // Настройка выхода из уровня.
+            node
+                .get_node_as::<Area3D>("Player/ExitDetector")
+                .signals()
+                .body_entered()
+                .connect_obj(
+                    &mut node.to_godot().cast::<T>(), 
+                    move |this: &mut T, _body: Gd<Node3D>| {
+                        end_of_level::EXIT_FROM_LEVEL_DATA
+                            .write().unwrap().num_of_level_exit = num_of_level;
+
+                        end_of_level::EXIT_FROM_LEVEL_DATA
+                            .write().unwrap().exited = HowPlayerExitedFromLevel::EndOfLevel;
+
+                        this.base().get_tree().unwrap().change_scene_to_file("res://scenes/main.tscn")
+                });
         }
 
-        if let Some(pause_menu) = node.try_get_node_as::<UserColorRect>("PauseMenu") {
+        if let Some(mut pause_menu) = node.try_get_node_as::<PauseMenu>("PauseMenu") {
+            // Сразу переводим меню на уже установленный язык.
+            pause_menu.bind_mut().translate(CONFIG.lock().unwrap().get_language());
+
             // * Настройка кнопки продолжить.
             let continue_func = move |this: &mut T| { 
                 this.base().get_node_as::<Player>("Player").set_physics_process(true);
@@ -154,7 +181,7 @@ impl BaseLevel {
                 .get_node_as::<Button>("SettingsHUD/ExitButton")
                 .signals()
                 .pressed()
-                .connect_obj(&pause_menu, |this: &mut UserColorRect| {
+                .connect_obj(&pause_menu, |this: &mut PauseMenu| {
                     this.base().get_node_as::<SettingsHUD>("SettingsHUD").hide();
                     this.show();
                 });
@@ -164,9 +191,18 @@ impl BaseLevel {
                 .get_node_as::<Button>("SettingsButton")
                 .signals()
                 .pressed()
-                .connect_obj(&pause_menu, |this: &mut UserColorRect| {
+                .connect_obj(&pause_menu, |this: &mut PauseMenu| {
                     this.base().get_node_as::<SettingsHUD>("SettingsHUD").show();
                     this.hide();
+                });
+            
+            // Изменение настроек.
+            pause_menu
+                .get_node_as::<SettingsHUD>("SettingsHUD")
+                .signals()
+                .language_changed()
+                .connect_obj(&pause_menu, |this: &mut PauseMenu| {
+                    this.translate(CONFIG.lock().unwrap().get_language());
                 });
         }
     }
@@ -218,14 +254,25 @@ impl BaseLevel {
         self.squashed_mobs += 1;
 
         if self.squashed_mobs == self.all_mobs_on_level {
-            // TODO
-            godot_print!("all mob squashed!");
+            self.base().get_node_as::<Node3D>("Objects/Exit").show();
+        
+            self
+                .base()
+                .get_node_as::<CollisionShape3D>("Objects/Exit/CharacterBody3D/CollisionShape3D")
+                .set_disabled(false);
         }
     }
 
     /// Авто оживление игрока.
     // ! ТОЛЬКО ДЛЯ РАЗРАБОТКИ!
     fn on_player_hit(&mut self) {
+        self.base().get_node_as::<Node3D>("Objects/Exit").hide();
+        
+        self
+            .base()
+            .get_node_as::<CollisionShape3D>("Objects/Exit/CharacterBody3D/CollisionShape3D")
+            .set_disabled(false);
+
         self.base()
             .get_node_as::<Player>("Player")
             .bind_mut()
@@ -252,6 +299,7 @@ impl BaseLevel {
 fn get_text_mob_name(mob_num: i64) -> String {
     format!("Mobs/Mob{mob_num}")
 }
+
 /// Получает путь моба в сцене с учетом иерархии имен. 
 /// Возвращает путь к классу 'PathFollow3D' в сцене.
 #[inline(always)]
@@ -263,32 +311,4 @@ fn get_text_mob_follow_path(mob_num: i64) -> String {
 #[inline(always)]
 fn get_text_mob_path(mob_num: i64) -> String {
     format!("Mobs/Mob{mob_num}Path")
-}
-
-/// Вспомогательный класс. Ничего не добавляет
-/// и ничем не отличается от `ColorRect`.
-#[derive(GodotClass)]
-#[class(init, base = ColorRect)]
-struct UserColorRect {
-    pub base: Base<ColorRect>
-}
-
-impl UserColorRect {
-    pub fn hide(&self) {
-        self.base().get_node_as::<Label>("NameOfMenu").hide();
-
-        self.base().get_node_as::<Button>("ContinueButton").hide();
-        self.base().get_node_as::<Button>("RestartButton").hide();
-        self.base().get_node_as::<Button>("SettingsButton").hide();
-        self.base().get_node_as::<Button>("ExitButton").hide();
-    }
-    
-    pub fn show(&self) {
-        self.base().get_node_as::<Label>("NameOfMenu").show();
-
-        self.base().get_node_as::<Button>("ContinueButton").show();
-        self.base().get_node_as::<Button>("RestartButton").show();
-        self.base().get_node_as::<Button>("SettingsButton").show();
-        self.base().get_node_as::<Button>("ExitButton").show();
-    }
 }

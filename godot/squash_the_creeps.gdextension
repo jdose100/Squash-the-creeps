@@ -4,11 +4,11 @@ compatibility_minimum = 4.4
 reloadable = true
 
 [libraries]
-linux.debug.x86_64 =     "res://../rust/target/debug/libsquash_the_creeps.so"
-linux.release.x86_64 =   "res://../rust/target/release/libsquash_the_creeps.so"
-windows.debug.x86_64 =   "res://../rust/target/x86_64-pc-windows-gnu/debug/squash_the_creeps.dll"
-windows.release.x86_64 = "res://../rust/target/release/squash_the_creeps.dll"
-macos.debug =            "res://../rust/target/debug/libsquash_the_creeps.dylib"
-macos.release =          "res://../rust/target/release/libsquash_the_creeps.dylib"
-macos.debug.arm64 =      "res://../rust/target/debug/libsquash_the_creeps.dylib"
-macos.release.arm64 =    "res://../rust/target/release/libsquash_the_creeps.dylib"
+linux.debug.x86_64 =     "res://../rust/target/x86_64-unknown-linux-gnu/debug/libdeeps_creeps.so"
+linux.release.x86_64 =   "res://../rust/target/x86_64-unknown-linux-gnu/release/libdeeps_creeps.so"
+windows.debug.x86_64 =   "res://../rust/target/x86_64-pc-windows-gnu/debug/deeps_creeps.dll"
+windows.release.x86_64 = "res://../rust/target/x86_64-pc-windows-gnu/release/deeps_creeps.dll"
+macos.debug =            "res://../rust/target/debug/libdeeps_creeps.dylib"
+macos.release =          "res://../rust/target/release/libdeeps_creeps.dylib"
+macos.debug.arm64 =      "res://../rust/target/debug/libdeeps_creeps.dylib"
+macos.release.arm64 =    "res://../rust/target/release/libdeeps_creeps.dylib"

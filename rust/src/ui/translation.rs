@@ -41,6 +41,11 @@ pub struct LanguageText {
     pub sound_button: &'static str,
     pub music_volume: &'static str,
     pub sound_effect_volume: &'static str,
+
+    // * PauseMenu
+    pub pause_menu: &'static str,
+    pub continue_button: &'static str,
+    pub restart: &'static str,
 }
 
 /// В данной переменной хранится перевод текста на английский язык.
@@ -62,6 +67,11 @@ pub static EN_LANGUAGE: LazyLock<LanguageText> = LazyLock::new(|| LanguageText {
     sound_button: "Sound",
     music_volume: "Music volume",
     sound_effect_volume: "Sound effects volume",
+
+    // * PauseMenu
+    pause_menu: "Pause Menu",
+    continue_button: "Continue",
+    restart: "Restart"
 });
 
 /// В данной переменной хранится перевод на русский язык.
@@ -83,4 +93,9 @@ pub static RU_LANGUAGE: LazyLock<LanguageText> = LazyLock::new(|| LanguageText {
     sound_button: "Звук",
     music_volume: "Громкость музыки",
     sound_effect_volume: "Громкость звуковых эффектов",
+
+    // * PauseMenu
+    pause_menu: "Меню паузы",
+    continue_button: "Продолжить",
+    restart: "Заново"
 });

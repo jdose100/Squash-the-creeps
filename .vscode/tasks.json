@@ -4,17 +4,19 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Build: Rust (linux)",
+            "label": "Build: rust (linux)",
             "type": "shell",
             "command": "cargo",
             "args": [
                 "build",
                 "--manifest-path",
-                "${workspaceFolder}/rust/Cargo.toml"
+                "${workspaceFolder}/rust/Cargo.toml",
+                "--target",
+                "x86_64-unknown-linux-gnu"
             ]
         },
         {
-            "label": "Build: Rust (windows)",
+            "label": "Build: rust (windows)",
             "type": "shell",
             "command": "cargo",
             "args": [
@@ -37,7 +39,21 @@
                 "\"Linux\"",
                 "build/linux/Deeps-Creeps"
             ],
-            "dependsOn": "Build: Rust (linux)"
+            "dependsOn": "Build: rust (linux)"
+        },
+        {
+            "label": "Export: debug (windows)",
+            "type": "shell",
+            "command": "godot-4",
+            "args": [
+                "--headless",
+                "--path",
+                "godot",
+                "--export-debug",
+                "\"Windows\"",
+                "build/windows/Deeps-Creeps.exe"
+            ],
+            "dependsOn": "Build: rust (windows)"
         }
     ]
 }

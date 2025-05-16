@@ -23,6 +23,7 @@ pub enum HowPlayerExitedFromLevel {
 /// их возможное наличие).
 #[derive(Default, Debug)]
 pub struct ExitFromLevelData {
+    pub num_of_level_exit: u64,
     pub exited: HowPlayerExitedFromLevel
 }
 

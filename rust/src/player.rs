@@ -217,7 +217,7 @@ impl Player {
 
     /// Убивает игрока.
     fn kill(&mut self) {
-        if !self.is_die && false {
+        if !self.is_die {
             self.base().get_node_as::<Node3D>("Pivot").hide();
             self.is_die = true;
 

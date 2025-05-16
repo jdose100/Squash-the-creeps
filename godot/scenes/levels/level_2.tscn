@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://bannay6t7dfdn"]
+[gd_scene load_steps=21 format=3 uid="uid://bannay6t7dfdn"]
 
 [ext_resource type="Material" uid="uid://c0cp1qoswa4to" path="res://art/materials/wall.tres" id="1_fiq81"]
 [ext_resource type="Material" uid="uid://dxpx4g1p0a2yj" path="res://art/materials/grass.tres" id="1_j2425"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://fxl4ba8g4ca3" path="res://scenes/objects/mob.tscn" id="3_l37oo"]
 [ext_resource type="PackedScene" uid="uid://cwevoa4jfecwe" path="res://scenes/objects/player.tscn" id="3_ra442"]
 [ext_resource type="Material" uid="uid://c52akaeps0aid" path="res://art/materials/platform.tres" id="4_ibugp"]
+[ext_resource type="PackedScene" uid="uid://gygb8mwr6f2g" path="res://scenes/objects/end_of_level.tscn" id="6_8qukl"]
 [ext_resource type="PackedScene" uid="uid://b5sgghgmmsrmm" path="res://scenes/user_interface/pause_menu.tscn" id="7_ibugp"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_qpwj6"]
@@ -50,9 +51,9 @@ _data = {
 point_count = 6
 
 [node name="Level2 (Spikes level)" type="Level2"]
-all_mobs_on_level = 7
 
 [node name="PauseMenu" parent="." instance=ExtResource("7_ibugp")]
+visible = false
 
 [node name="Objects" type="Node" parent="."]
 
@@ -510,14 +511,8 @@ sorting_use_aabb_center = false
 material_override = ExtResource("4_ibugp")
 mesh = SubResource("BoxMesh_qpwj6")
 
-[node name="Exit" type="CharacterBody3D" parent="Objects" groups=["door"]]
-transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 16.2152, 1.965, 33.7389)
-collision_layer = 8
-collision_mask = 0
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/Exit"]
-transform = Transform3D(0.999999, 0, 0, 0, 0.999999, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("BoxShape3D_l37oo")
+[node name="Exit" parent="Objects" instance=ExtResource("6_8qukl")]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 15.8602, 3.508, 34.9605)
 
 [node name="Mobs" type="Node" parent="."]
 
@@ -528,7 +523,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -42.8302, 0.33495, 20.207)
 curve = SubResource("Curve3D_l37oo")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Mobs/Mob0Path"]
-transform = Transform3D(-0.0189367, -0.00370768, -0.999765, -1.16415e-10, 0.999967, -0.00370826, 0.999817, -7.02238e-05, -0.0189357, -43.0342, 0.0761408, 19.8742)
+transform = Transform3D(-0.0189367, -0.00370768, -0.999766, -1.16415e-10, 0.999967, -0.00370826, 0.999817, -7.02238e-05, -0.0189357, -43.0342, 0.0761408, 19.8742)
 
 [node name="Mob1" parent="Mobs" groups=["ArenaMobs"] instance=ExtResource("3_l37oo")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.16024, 0.165517, 1.78601)
@@ -598,6 +593,4 @@ transform = Transform3D(1, 0, 0, 0, -0.707107, 0.707107, 0, -0.707107, -0.707107
 light_energy = 2.0
 
 [node name="Player" parent="." instance=ExtResource("3_ra442")]
-speed = 18.0
-spawn_coords = Vector3(-37.589, 1.538, 42.167)
 transform = Transform3D(0.998458, 0, -0.0555078, 0, 1, 0, 0.0555078, 0, 0.998458, -37.589, 1.53849, 42.1674)

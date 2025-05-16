@@ -114,7 +114,7 @@ impl MainMenu {
     }
     
     /// Открывает меню уровней и закрывает главное меню.
-    fn open_level_menu(&mut self) {
+    pub fn open_level_menu(&mut self) {
         self.base().get_node_as::<ColorRect>("LevelHUD").show(); 
         self.hide_menu();
     }

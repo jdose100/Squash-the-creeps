@@ -120,6 +120,7 @@ autoplay = "float"
 
 [node name="DeadSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_d4cuo")
+bus = &"SoundEffects"
 
 [connection signal="screen_exited" from="VisibleNotifier" to="." method="on_visible_on_screen_notifier_3d_screen_exited"]
 [connection signal="finished" from="DeadSound" to="." method="_on_dead_sound_finished"]
