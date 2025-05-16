@@ -66,11 +66,21 @@ impl ICharacterBody3D for Player {
         self.base().get_node_as::<Node3D>("Pivot").hide();
 
         // Подключаем сигнал 'body_entered'.
-        self.base()
+        self
+            .base()
             .get_node_as::<Area3D>("MobDetector")
             .signals()
             .body_entered()
             .connect_obj(self, Self::on_mob_detector_body_entered);
+        
+        self
+            .base()
+            .get_node_as::<Area3D>("ExitDetector")
+            .signals()
+            .body_entered()
+            .connect_obj(self, |_this: &mut Self, _body| {
+                godot_print!("exit")
+            });
     }
 
     fn physics_process(&mut self, delta: f64) {

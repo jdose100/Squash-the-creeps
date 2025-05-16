@@ -1,10 +1,14 @@
 //! В данном модуля расположена реализация `MainScene`.
 //! Задачи и зоны ответственности `MainScene`:
+//! 
 //!     * Работа с файлами - отвечает за сохранение и чтение данных в файлах (сохранение прогресса/настроек).
 //!     * Запуск уровней - отвечает за запуск уровней игры.
 //!     * Взаимодействие с UI - взаимодействует с UI частью, предназначенной для `MainScene`.
 
+use crate::config::CONFIG;
 use crate::ui::main_menu::MainMenu;
+use crate::levels::end_of_level::{HowPlayerExitedFromLevel, EXIT_FROM_LEVEL_DATA};
+
 use godot::{
     classes::Button,
     obj::WithBaseField,
@@ -29,6 +33,13 @@ impl INode for MainScene {
     fn ready(&mut self) {
         // Получаем пользовательский интерфейс.
         let main_menu = self.base().get_node_as::<MainMenu>("MainMenu");
+        CONFIG.is_poisoned();
+
+        // Изменяем прогресс если надо.
+        if let HowPlayerExitedFromLevel::EndOfLevel = EXIT_FROM_LEVEL_DATA.read().unwrap().exited {
+            CONFIG.lock().unwrap().progress.max_level += 1;
+            CONFIG.lock().unwrap().write();
+        }
         
         // * Подключаем сигналы UI для старта уровней.
 
@@ -48,8 +59,12 @@ impl INode for MainScene {
             .signals()
             .pressed()
             .connect_obj(self, |this: &mut Self| {
+                if CONFIG.lock().unwrap().progress.max_level < 2 {
+                    return;
+                }
+
                 this.base().get_node_as::<MainMenu>("MainMenu").bind_mut().start_new_game();
-                this.base().get_tree().unwrap().change_scene_to_file("res://scenes/levels/level_2.tscn")
+                this.base().get_tree().unwrap().change_scene_to_file("res://scenes/levels/level_2.tscn");
             });
     }
 }

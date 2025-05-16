@@ -1,0 +1,189 @@
+<mxfile host="65bd71144e">
+    <diagram id="rWws36u_UZR8ZlzBya25" name="Page-1">
+        <mxGraphModel dx="692" dy="300" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="5" value="&lt;font size=&quot;1&quot;&gt;Данный файл содержит&lt;/font&gt;&lt;div&gt;&lt;font size=&quot;1&quot;&gt;визуальное описание архитектуры игры на русском языке. Он на русском, потому что это родной язык автора.&lt;/font&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;strokeColor=default;strokeWidth=0;" parent="1" vertex="1">
+                    <mxGeometry width="120" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="10" value="&lt;font style=&quot;font-size: 10px;&quot;&gt;Главная сцена&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
+                    <mxGeometry x="95" y="170" width="80" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="11" value="Запуск уровня" style="rounded=0;whiteSpace=wrap;html=1;align=center;" parent="1" vertex="1">
+                    <mxGeometry x="5" y="220" width="90" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="12" value="Работа с UI&amp;nbsp;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="97.5" y="250" width="75" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="13" value="Работа с файлами" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="170" y="220" width="110" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="14" value="" style="endArrow=classic;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="10" target="12" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="155" y="270" as="sourcePoint"/>
+                        <mxPoint x="205" y="220" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="16" value="" style="endArrow=classic;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="10" target="11" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="155" y="270" as="sourcePoint"/>
+                        <mxPoint x="50" y="220" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="50" y="180"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="17" value="" style="endArrow=classic;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="10" target="13" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="155" y="270" as="sourcePoint"/>
+                        <mxPoint x="205" y="220" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="225" y="180"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="18" value="&lt;div style=&quot;text-align: center;&quot;&gt;&lt;font style=&quot;background-color: transparent;&quot; size=&quot;1&quot;&gt;Ответстве&lt;/font&gt;&lt;span style=&quot;background-color: transparent; font-size: x-small;&quot;&gt;нность главной сцены&lt;/span&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;strokeColor=default;strokeWidth=0;" parent="1" vertex="1">
+                    <mxGeometry x="95" y="130" width="80" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="19" value="Запуск уровня&lt;div&gt;&lt;font size=&quot;1&quot;&gt;После выбора уровня игроком, запускает его, передавая на него управление. После выхода из него сохраняет изменение прогресса.&lt;/font&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
+                    <mxGeometry x="310" y="130" width="120" height="160" as="geometry"/>
+                </mxCell>
+                <mxCell id="20" value="Работа с UI&lt;div&gt;&lt;font size=&quot;1&quot;&gt;Позволяет менять UI настройки игры,&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font size=&quot;1&quot;&gt;а также отвечает на запросы пользователя, если это в зоне ответствености Основной сцены (запись изменения настроек, запуск уровня и т.д.)&lt;/font&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
+                    <mxGeometry x="465" y="130" width="120" height="160" as="geometry"/>
+                </mxCell>
+                <mxCell id="22" value="Работа с файлами&lt;div&gt;&lt;font size=&quot;1&quot;&gt;Отвечает за работу с файлами, то есть запись новых настроек или изменение прогресса после прохождения уровня и т.д.&lt;/font&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
+                    <mxGeometry x="615" y="130" width="120" height="160" as="geometry"/>
+                </mxCell>
+                <mxCell id="27" style="edgeStyle=none;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="23" target="24" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="85" y="395" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="28" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="23" target="25" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="29" style="edgeStyle=none;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="23" target="26" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="23" value="Уровни" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="125" y="385" width="50" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="24" value="Логика уровня" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry y="385" width="85" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="25" value="Работа с UI&amp;nbsp;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="112.5" y="445" width="75" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="26" value="Передача данных&lt;div&gt;главной сцене&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="220" y="380" width="110" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="30" value="" style="endArrow=none;html=1;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint y="310" as="sourcePoint"/>
+                        <mxPoint x="840" y="310" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="31" value="&lt;font size=&quot;1&quot;&gt;Ответственность&amp;nbsp;&lt;/font&gt;&lt;div&gt;&lt;font size=&quot;1&quot;&gt;уровней&lt;/font&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=center;strokeColor=default;strokeWidth=0;" parent="1" vertex="1">
+                    <mxGeometry x="112.5" y="340" width="80" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="32" value="Логика уровня&lt;div&gt;&lt;font size=&quot;1&quot;&gt;Игровые механики, устройство уровня с точки зрения геймплея.&lt;/font&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
+                    <mxGeometry x="360" y="330" width="120" height="160" as="geometry"/>
+                </mxCell>
+                <mxCell id="33" value="Работа с UI&lt;div&gt;&lt;font size=&quot;1&quot;&gt;Меню паузы, меню прохождения уровня и уникальные к нему&amp;nbsp;&lt;/font&gt;&amp;nbsp;UI.&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
+                    <mxGeometry x="510" y="330" width="120" height="160" as="geometry"/>
+                </mxCell>
+                <mxCell id="34" value="Передача данных&lt;div&gt;главной сцене&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;font size=&quot;1&quot;&gt;Отправка данных главной сцене о том, как игрок прошел уровень (просто вышел из него или прошел его, дойдя до выхода)&lt;/font&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
+                    <mxGeometry x="660" y="330" width="120" height="160" as="geometry"/>
+                </mxCell>
+                <mxCell id="35" value="" style="endArrow=none;html=1;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint y="120" as="sourcePoint"/>
+                        <mxPoint x="840" y="120" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="36" value="Ниже содержится описание задач тех или иных объектов." style="rounded=0;whiteSpace=wrap;html=1;align=center;strokeColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="290" y="40" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="37" value="" style="endArrow=none;html=1;" edge="1" parent="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint y="640" as="sourcePoint"/>
+                        <mxPoint x="840" y="640" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="39" value="Данная зона содержит описание архитектуры уровня, а точнее описание его дерева" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry y="640" width="160" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="49" style="edgeStyle=none;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="43" target="44">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="50" style="edgeStyle=none;html=1;exitX=0;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="43" target="45">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="51" style="edgeStyle=none;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="43" target="47">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="53" style="edgeStyle=none;html=1;exitX=0.75;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="43" target="46">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="59" style="edgeStyle=none;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="43" target="54">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="66" style="edgeStyle=none;html=1;exitX=1;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="43" target="64">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="43" value="LevelXX" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="280" y="670" width="50" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="44" value="&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;PauseMenu&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 7px;&quot;&gt;(pause_menu.tscn)&lt;/font&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="192.5" y="670" width="65" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="45" value="Sun&lt;div&gt;&lt;font style=&quot;font-size: 7px;&quot;&gt;(&lt;/font&gt;&lt;font style=&quot;font-size: 7px;&quot;&gt;DirectionalLight3D)&lt;/font&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="197.5" y="720" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="46" value="Player&lt;div&gt;&lt;font style=&quot;font-size: 7px;&quot;&gt;(&lt;/font&gt;&lt;font style=&quot;font-size: 7px;&quot;&gt;player.tscn)&lt;/font&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="327.5" y="767.5" width="45" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="52" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="47" target="48">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="47" value="CameraPivot&lt;div&gt;&lt;font style=&quot;font-size: 7px;&quot;&gt;(Marker3D)&lt;/font&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="237.5" y="770" width="75" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="48" value="Camera3D&lt;div&gt;&lt;font style=&quot;font-size: 7px;&quot;&gt;(Camera3D)&lt;/font&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="240" y="830" width="70" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="60" style="edgeStyle=none;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="54" target="56">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="61" style="edgeStyle=none;html=1;exitX=1;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="54" target="55">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="54" value="Mobs&lt;div&gt;&lt;font style=&quot;font-size: 7px;&quot;&gt;(Node)&lt;/font&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="402.5" y="662.5" width="35" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="55" value="MobX&lt;div&gt;&lt;font style=&quot;font-size: 7px;&quot;&gt;(mob.tscn)&lt;/font&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="460" y="690" width="40" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="63" style="edgeStyle=none;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="56" target="58">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="56" value="MobXPath&lt;div&gt;&lt;font style=&quot;font-size: 7px;&quot;&gt;(Path3D)&lt;/font&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="460" y="655" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="58" value="PathFollow3D&lt;div&gt;(&lt;font style=&quot;font-size: 7px;&quot;&gt;PathFollow3D)&lt;/font&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="540" y="652.5" width="80" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="67" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="64" target="65">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="64" value="Objects&lt;div&gt;&lt;font style=&quot;font-size: 7px;&quot;&gt;(Node)&lt;/font&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="390.5" y="730" width="47" height="32" as="geometry"/>
+                </mxCell>
+                <mxCell id="65" value="Любые другие объекты, которые есть в сцене" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="354" y="815" width="120" height="60" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

@@ -1,6 +1,8 @@
 //! Данный модуль содержит логику для UI главного меню.
 
-use super::{settings::SettingsHUD, translation::*};
+use crate::config::CONFIG;
+
+use super::settings::SettingsHUD;
 use godot::{
     classes::{Button, ColorRect, IColorRect, Label},
     obj::WithBaseField,
@@ -11,9 +13,6 @@ use godot::{
 #[derive(GodotClass)]
 #[class(base = ColorRect)]
 pub struct MainMenu {
-    /// Язык, который сейчас используется.
-    pub current_language: &'static LanguageText,
-
     base: Base<ColorRect>,
 }
 
@@ -21,7 +20,6 @@ pub struct MainMenu {
 impl IColorRect for MainMenu {
     fn init(base: Base<ColorRect>) -> Self { 
         Self {
-            current_language: &RU_LANGUAGE,
             base,
         }
     }
@@ -29,13 +27,8 @@ impl IColorRect for MainMenu {
     fn ready(&mut self) {
         self.update_text_from_language();
 
-        // Настраиваем меню настроек.
-        let gd = self.to_gd();
-        self.
-            base()
-            .get_node_as::<SettingsHUD>("SettingsHUD")
-            .bind_mut()
-            .connect_main_menu_signals(&gd);
+        //* Настраиваем меню настроек.
+        let mut settings = self.base().get_node_as::<SettingsHUD>("SettingsHUD");
 
         // Устанавливаем сигнал для открытия меню настроек.
         self
@@ -44,6 +37,14 @@ impl IColorRect for MainMenu {
             .signals()
             .pressed()
             .connect_obj(self, Self::open_settings_menu);
+
+        // Устанавливает сигнал для закрытия меню настроек.
+        settings.signals().settings_closed().connect_obj(self, Self::close_settings_menu);
+
+        // * Устанавливаем сигналы для изменения языка.
+        settings.signals().language_changed().connect_obj(self, |this: &mut Self| {
+            this.update_text_from_language();
+        });
 
         // * Настраиваем меню уровней
         
@@ -65,11 +66,10 @@ impl IColorRect for MainMenu {
     }
 }
 
-#[godot_api]
 impl MainMenu {
     /// Настраиваем интерфейс на новый язык.
     pub fn update_text_from_language(&mut self) {
-        let language = self.current_language;
+        let language = CONFIG.lock().unwrap().get_language();
 
         self
             .base()
@@ -93,38 +93,39 @@ impl MainMenu {
 
     /// Закрывает меню настроек и открывает главное меню.
     pub fn close_settings_menu(&mut self) {
-        self.base().get_node_as::<SettingsHUD>("SettingsHUD").bind_mut().close_settings_menu();
-        self.show();
+        self.show_menu();
     }
 
     /// Открывает меню настроек и закрывает главное меню.
     fn open_settings_menu(&mut self) {
-        self.hide();
+        self.hide_menu();
 
-        let mut settings = self.base().get_node_as::<SettingsHUD>("SettingsHUD");
-        settings.bind_mut().open_settings_menu();
-        settings.bind_mut().close_all_settings_menus();
+        self
+            .base()
+            .get_node_as::<SettingsHUD>("SettingsHUD")
+            .bind_mut()
+            .open_settings_menu();
     }
 
     /// Закрывает меню уровней и открывает главное меню.
     fn close_level_menu(&mut self) {
         self.base().get_node_as::<ColorRect>("LevelHUD").hide();
-        self.show();
+        self.show_menu();
     }
     
     /// Открывает меню уровней и закрывает главное меню.
     fn open_level_menu(&mut self) {
         self.base().get_node_as::<ColorRect>("LevelHUD").show(); 
-        self.hide();
+        self.hide_menu();
     }
 
     /// Делает меню невидимым.
-    fn hide(&self) {
+    fn hide_menu(&self) {
         self.base().get_tree().unwrap().call_group("main_menu", "hide", &[]);
     }
 
     /// Делает меню видимым.
-    fn show(&self) {
+    fn show_menu(&self) {
         self.base().get_tree().unwrap().call_group("main_menu", "show", &[]);
     }
 }

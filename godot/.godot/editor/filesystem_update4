@@ -1,5 +1,3 @@
-res://scenes/main.tscn
-res://scenes/user_interface/main_menu.tscn
-res://scenes/user_interface/settings.tscn
-res://scenes/user_interface/level_hud.tscn
+res://scenes/levels/level_1.tscn
 res://logs/godot.log
+res://scenes/user_interface/settings.tscn

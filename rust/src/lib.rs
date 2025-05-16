@@ -3,6 +3,7 @@
 //! который открывается сервисом Draw.IO
 use godot::prelude::{ExtensionLibrary, gdextension};
 
+mod config;
 mod levels;
 mod main_scene;
 mod mob;

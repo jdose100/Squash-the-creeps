@@ -2,7 +2,7 @@
 //! в том случае, если все мобы из группы 'ArenaMobs' мертвы.
 
 use godot::{
-    classes::{Area3D, Marker3D},
+    classes::{Area3D, InputEvent, Marker3D},
     prelude::*,
 };
 
@@ -17,6 +17,9 @@ struct Level2 {
     #[export]
     all_mobs_on_level: i64,
 
+    /// Все мобы на уровне которые были найдены.
+    mobs: Vec<Gd<Mob>>,
+
     base: Base<Node>,
 }
 
@@ -25,23 +28,26 @@ impl INode for Level2 {
     fn init(base: Base<Node>) -> Self {
         Self {
             all_mobs_on_level: 0,
+            mobs: Vec::new(),
             base,
         }
     }
 
-    fn ready(&mut self) {
-        BaseLevel::init_node(&self.base());
+    fn ready(&mut self) { 
+        // Инициализируем всех мобов.
+        self.mobs =
+            BaseLevel::default_mobs_init(
+                &self.base(),
+                self.all_mobs_on_level,
+                |this, mob| {
+                    mob.signals()
+                        .squashed()
+                        .connect_obj(this, Self::on_mob_squashed);
+                }
+            );
 
-        // Инициализирует всех мобов.
-        BaseLevel::default_mobs_init(
-            &self.base(), 
-            self.all_mobs_on_level, 
-            |this, mob| {
-                mob.signals()
-                    .squashed()
-                    .connect_obj(this, Self::on_mob_squashed);
-            }
-        );
+        // Инициализируем уровень.
+        BaseLevel::init_node(&self.base(), self.mobs.clone(), self.base().get_scene_file_path());
 
         // подключаем сигнал для выхода с уровня.
         self
@@ -64,6 +70,12 @@ impl INode for Level2 {
         self.base()
             .get_node_as::<Marker3D>("CameraPivot")
             .set_position(self.base().get_node_as::<Player>("Player").get_position());
+    }
+
+    fn input(&mut self, event: Gd<InputEvent>) {
+        if event.is_action_pressed("pause") {
+            BaseLevel::pause(self.base().clone().cast::<Self>(), &mut self.mobs);
+        }
     }
 }
 

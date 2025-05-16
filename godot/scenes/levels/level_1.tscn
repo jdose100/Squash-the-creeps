@@ -1,10 +1,10 @@
 [gd_scene load_steps=17 format=3 uid="uid://be2gdbtar7tb7"]
 
 [ext_resource type="PackedScene" uid="uid://cwevoa4jfecwe" path="res://scenes/objects/player.tscn" id="1_6iamk"]
+[ext_resource type="PackedScene" uid="uid://b5sgghgmmsrmm" path="res://scenes/user_interface/pause_menu.tscn" id="1_oc4kc"]
 [ext_resource type="PackedScene" uid="uid://dcfyhjm3032vn" path="res://scenes/objects/spike.tscn" id="1_sk5k4"]
 [ext_resource type="PackedScene" uid="uid://fxl4ba8g4ca3" path="res://scenes/objects/mob.tscn" id="2_nsrm0"]
 [ext_resource type="Material" uid="uid://c0cp1qoswa4to" path="res://art/materials/wall.tres" id="2_oc4kc"]
-[ext_resource type="PackedScene" uid="uid://bw1jjrtt5ug48" path="res://scenes/user_interface/main_menu.tscn" id="4_6761a"]
 [ext_resource type="Material" uid="uid://dxpx4g1p0a2yj" path="res://art/materials/grass.tres" id="4_x42e6"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ksju7"]
@@ -53,6 +53,8 @@ point_count = 4
 
 [node name="Level1 (Tutorial level)" type="BaseLevel"]
 all_mobs_on_level = 3
+
+[node name="PauseMenu" parent="." instance=ExtResource("1_oc4kc")]
 
 [node name="TutorialLabels" type="Node" parent="."]
 
@@ -309,7 +311,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.3031, 5.20864, -22.4628)
 curve = SubResource("Curve3D_x42e6")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Mobs/Mob1Path"]
-transform = Transform3D(0.99984, -0.000202346, -0.0173668, -7.2759e-12, 0.99993, -0.0116504, 0.0173679, 0.0116487, 0.999774, -11.9534, 0.822944, 6.38075)
+transform = Transform3D(0.99984, -0.000202346, -0.0173668, -7.27589e-12, 0.99993, -0.0116504, 0.0173679, 0.0116487, 0.999774, -11.9534, 0.822944, 6.38075)
 
 [node name="Mob2" parent="Mobs" instance=ExtResource("2_nsrm0")]
 transform = Transform3D(-0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, -0.866025, 32.6336, 1.47119, 10.302)
@@ -319,7 +321,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.6747, 0, 5.88224)
 curve = SubResource("Curve3D_6761a")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Mobs/Mob2Path"]
-transform = Transform3D(-0.883027, 0.00695446, 0.469269, -2.32831e-10, 0.999871, -0.0148184, -0.469321, -0.0130848, -0.88293, -15.0383, 0.722534, -5.96458)
+transform = Transform3D(-0.883027, 0.00695445, 0.469269, -2.32831e-10, 0.999871, -0.0148184, -0.469321, -0.0130848, -0.88293, -15.0383, 0.722534, -5.96458)
 
 [node name="Player" parent="." instance=ExtResource("1_6iamk")]
 speed = 18.0
@@ -329,5 +331,3 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -32, 1, 33)
 [node name="Sun" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -0.707107, 0.707107, 0, -0.707107, -0.707107, 0, 36.9267, 0)
 light_energy = 2.0
-
-[node name="UserInterface" parent="." instance=ExtResource("4_6761a")]

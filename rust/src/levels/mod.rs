@@ -1,16 +1,18 @@
-//! Данный модуль содержит логику уровней.
+//! Данный модуль содержит логику уровней и все необходимые данные, которые касаются уровней.
 //! BaseLevel - это класс, который реализует минимум функций для работы уровня,
 //! является полностью самостоятельным. Подмодули же содержат доп. логику, а 
 //! BaseLevel в этом случае выступает в качестве родителя.
 
-use crate::{mob::Mob, player::Player, ui::main_menu::MainMenu};
+
+use crate::{mob::Mob, player::Player, ui::settings::SettingsHUD};
 use godot::{
-    classes::{Label, Marker3D, Path3D, PathFollow3D},
-    global::randf_range,
-    obj::{BaseRef, WithBaseField},
-    prelude::*,
+    classes::{Button, ColorRect, InputEvent, Label, Marker3D, Path3D, PathFollow3D}, 
+    global::randf_range, 
+    obj::{bounds::DeclUser, BaseRef, Bounds, WithBaseField}, 
+    prelude::*
 };
 
+pub(crate) mod end_of_level;
 mod level2;
 
 /// Класс, реализующий минимальную логику
@@ -25,6 +27,9 @@ struct BaseLevel {
     /// Сколько мобов было убито на уровне.
     squashed_mobs: i64,
 
+    /// Все мобы на уровне.
+    mobs: Vec<Gd<Mob>>,
+
     base: Base<Node>,
 }
 
@@ -34,23 +39,27 @@ impl INode for BaseLevel {
         Self {
             all_mobs_on_level: 0,
             squashed_mobs: 0,
+            mobs: Vec::new(),
             base,
         }
     }
 
     fn ready(&mut self) {
-        Self::init_node(&self.base());
-
         // Инициализируем всех мобов.
-        Self::default_mobs_init(
-            &self.base(),
-            self.all_mobs_on_level,
-            |this, mob| {
-                mob.signals()
-                    .squashed()
-                    .connect_obj(this, Self::on_mob_squashed);
-            }
-        );
+        self.mobs =
+            Self::default_mobs_init(
+                &self.base(),
+                self.all_mobs_on_level,
+                |this, mob| {
+                    mob
+                        .signals()
+                        .squashed()
+                        .connect_obj(this, Self::on_mob_squashed);
+                }
+            );
+
+        // Инициализируем уровень.
+        Self::init_node(&self.base(), self.mobs.clone(), self.base().get_scene_file_path());
 
         self.base()
             .get_node_as::<Player>("Player")
@@ -64,35 +73,117 @@ impl INode for BaseLevel {
             .get_node_as::<Marker3D>("CameraPivot")
             .set_position(self.base().get_node_as::<Player>("Player").get_position());
     }
+
+    fn input(&mut self, event: Gd<InputEvent>) {
+        if event.is_action_pressed("pause") {
+            Self::pause(self.base().clone().cast::<Self>(), &mut self.mobs);
+        }
+    }
 }
 
-#[godot_api]
 impl BaseLevel {
-    /// Настраивает игрока и IU с параметрами BaseLevel, 
+    /// Настраивает уровень с параметрами BaseLevel, 
     /// необходим для удаления шаблонного кода в дочерних классах. 
-    pub fn init_node<T: GodotClass + INode>(node: &BaseRef<T>) {
+    /// 
+    /// Mobs - массив мобов нужный для работы паузы.
+    /// 
+    /// FileName - строка в виде пути к сцене, нужна для работы кнопки `Restart`.
+    /// 
+    /// Пример использования:
+    /// ```rust
+    /// BaseLevel::init_node(&self.base(), self.mobs.clone());
+    /// ```
+    pub fn init_node<T>(
+        node: &BaseRef<T>, 
+        mut mobs: Vec<Gd<Mob>>,
+        path: GString
+    ) 
+    where
+        T: GodotClass + INode + Bounds<Declarer = DeclUser> + Inherits<Node> + WithBaseField
+    {
         if let Some(mut player) = node.try_get_node_as::<Player>("Player") {
             player.bind_mut().alive();
         }
 
-        if let Some(mut ui) = node.try_get_node_as::<MainMenu>("UserInterface") {
-            ui.bind_mut().start_new_game();
+        if let Some(pause_menu) = node.try_get_node_as::<UserColorRect>("PauseMenu") {
+            // * Настройка кнопки продолжить.
+            let continue_func = move |this: &mut T| { 
+                this.base().get_node_as::<Player>("Player").set_physics_process(true);
+                this.base().get_node_as::<ColorRect>("PauseMenu").hide();
+
+                for mob in &mut mobs {
+                    mob.set_physics_process(true);
+                }
+            };
+
+            pause_menu
+                .get_node_as::<Button>("ContinueButton")
+                .signals()
+                .pressed()
+                .connect_obj(&mut node.to_godot().cast::<T>(), continue_func);
+
+            // * Настройка кнопки рестарт.
+            let restart_func = move |this: &mut T| {
+                this.base().get_tree().unwrap().change_scene_to_file(&path);
+            };
+
+            pause_menu
+                .get_node_as::<Button>("RestartButton")
+                .signals()
+                .pressed()
+                .connect_obj(&mut node.to_godot().cast::<T>(), restart_func);
+
+            // * Настройка кнопки выхода.
+            let exit_func = |this: &mut T| {
+                // Указываем что вышли из уровня через меню.
+                end_of_level::EXIT_FROM_LEVEL_DATA.write().unwrap()
+                    .exited = end_of_level::HowPlayerExitedFromLevel::ExitFromMenu;
+
+                this.base().get_tree().unwrap().change_scene_to_file("res://scenes/main.tscn");
+            };
+
+            pause_menu
+                .get_node_as::<Button>("ExitButton")
+                .signals()
+                .pressed()
+                .connect_obj(&mut node.to_godot().cast::<T>(), exit_func);
+
+            // * Настройка кнопки настройки.
+            // Закрытие настроек.
+            pause_menu
+                .get_node_as::<Button>("SettingsHUD/ExitButton")
+                .signals()
+                .pressed()
+                .connect_obj(&pause_menu, |this: &mut UserColorRect| {
+                    this.base().get_node_as::<SettingsHUD>("SettingsHUD").hide();
+                    this.show();
+                });
+            
+            // Открытие настроек
+            pause_menu
+                .get_node_as::<Button>("SettingsButton")
+                .signals()
+                .pressed()
+                .connect_obj(&pause_menu, |this: &mut UserColorRect| {
+                    this.base().get_node_as::<SettingsHUD>("SettingsHUD").show();
+                    this.hide();
+                });
         }
     }
 
-    /// Инициировать и вызвать «метод» для всех мобов в сцене, указанных счетчиком. 
-    pub fn default_mobs_init<T, F>(node: &BaseRef<T>, mob_count: i64, method: F)
+    /// Инициализировать и вызвать «метод» для всех мобов в сцене, указанных счетчиком. 
+    pub fn default_mobs_init<T, F>(node: &BaseRef<T>, mob_count: i64, method: F) -> Vec<Gd<Mob>>
     where
         T: GodotClass + INode + Inherits<Node>,
         F: Fn(&Gd<T>, &mut Gd<Mob>),
     {
+        let mut mobs: Vec<Gd<Mob>> = Vec::new();
+
         for i in 0..mob_count {
             let mob = node.try_get_node_as::<Mob>(&get_text_mob_name(i));
 
             if let Some(mut mob) = mob {
                 method(&node.to_godot().cast(), &mut mob);
-
-                //* The following code is needed to be able to move along a given path!
 
                 let follow_path =
                     node.try_get_node_as::<PathFollow3D>(&get_text_mob_follow_path(i));
@@ -101,7 +192,24 @@ impl BaseLevel {
                 let follow_speed = randf_range(0.1, 0.34);
 
                 mob.bind_mut().initialize(follow_path, path, follow_speed);
+                
+                mobs.push(mob);
             }
+        }
+
+        mobs
+    }
+
+    /// Ставит уровень на паузу.
+    pub fn pause<T>(node: Gd<T>, mobs: &mut Vec<Gd<Mob>>)
+    where
+        T: GodotClass + INode + Inherits<Node> + WithBaseField
+    {
+        node.get_node_as::<Player>("Player").set_physics_process(false);
+        node.get_node_as::<ColorRect>("PauseMenu").show();
+
+        for mob in mobs {
+            mob.set_physics_process(false);
         }
     }
 
@@ -112,15 +220,6 @@ impl BaseLevel {
         if self.squashed_mobs == self.all_mobs_on_level {
             // TODO
             godot_print!("all mob squashed!");
-
-            //* Для визуального вывода, ТОЛЬКО ДЛЯ РАЗРАБОТКИ!
-            let mut label = self
-                .base()
-                .get_node_as::<MainMenu>("UserInterface")
-                .get_node_as::<Label>("Improvement");
-
-            label.show();
-            label.set_text("End of level!");
         }
     }
 
@@ -142,33 +241,54 @@ impl BaseLevel {
         }
 
         self.squashed_mobs = 0;
-
-        self.base()
-            .get_node_as::<MainMenu>("UserInterface")
-            .get_node_as::<Label>("Improvement")
-            .hide();
     }
 }
 
-// functions providing a string API for loading data from a scene
+// * Функции, предоставляющие строковый API для загрузки данных из сцены.
 
-/// Get mob path in scene with respecting the hierarchy of names.
-/// Return path to 'Mob' class in scene.
+/// Получает путь моба в сцене с учетом иерархии имен. 
+/// Возвращает путь к классу 'Mob' в сцене. 
 #[inline(always)]
 fn get_text_mob_name(mob_num: i64) -> String {
     format!("Mobs/Mob{mob_num}")
 }
-
-/// Get mob path in scene with respecting the hierarchy of names.
-/// Return path to 'PathFollow3D' class in scene.
+/// Получает путь моба в сцене с учетом иерархии имен. 
+/// Возвращает путь к классу 'PathFollow3D' в сцене.
 #[inline(always)]
 fn get_text_mob_follow_path(mob_num: i64) -> String {
     format!("Mobs/Mob{mob_num}Path/PathFollow3D")
 }
-
-/// Get mob path in scene with respecting the hierarchy of names.
-/// Return path to 'Path3D' class in scene.
+/// Получает путь моба в сцене с учетом иерархии имен. 
+/// Возвращает путь к классу 'Path3D' в сцене.
 #[inline(always)]
 fn get_text_mob_path(mob_num: i64) -> String {
     format!("Mobs/Mob{mob_num}Path")
+}
+
+/// Вспомогательный класс. Ничего не добавляет
+/// и ничем не отличается от `ColorRect`.
+#[derive(GodotClass)]
+#[class(init, base = ColorRect)]
+struct UserColorRect {
+    pub base: Base<ColorRect>
+}
+
+impl UserColorRect {
+    pub fn hide(&self) {
+        self.base().get_node_as::<Label>("NameOfMenu").hide();
+
+        self.base().get_node_as::<Button>("ContinueButton").hide();
+        self.base().get_node_as::<Button>("RestartButton").hide();
+        self.base().get_node_as::<Button>("SettingsButton").hide();
+        self.base().get_node_as::<Button>("ExitButton").hide();
+    }
+    
+    pub fn show(&self) {
+        self.base().get_node_as::<Label>("NameOfMenu").show();
+
+        self.base().get_node_as::<Button>("ContinueButton").show();
+        self.base().get_node_as::<Button>("RestartButton").show();
+        self.base().get_node_as::<Button>("SettingsButton").show();
+        self.base().get_node_as::<Button>("ExitButton").show();
+    }
 }

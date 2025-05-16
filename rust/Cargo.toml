@@ -8,3 +8,8 @@ crate-type = ["cdylib"]
 
 [dependencies]
 godot = { git = "https://github.com/godot-rust/gdext.git", features = ["register-docs", "api-4-4"] }
+
+
+serde = "*"
+serde_derive = "*"
+serde_json = "*"

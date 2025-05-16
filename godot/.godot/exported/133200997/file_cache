@@ -1,6 +1,5 @@
-res://scenes/user_interface.tscn::34276319780b849a0b5fa7acab0ab510::1746957448::res://.godot/exported/133200997/export-6ca7ebd9c99e9172af9a649c5afbdb45-user_interface.scn
-res://scenes/levels/level_1.tscn::4c7ec19b9d0b510df2b2fd553eaf0f2e::1746904377::res://.godot/exported/133200997/export-446b1ed11cc7129b20b35ff4df2b3752-level_1.scn
-res://scenes/levels/level_2.tscn::43350bc06bb9d151b599b19a0445d8b2::1746904352::res://.godot/exported/133200997/export-a18c5401c17cd33ddcb0f5ac6af637f4-level_2.scn
+res://scenes/levels/level_1.tscn::5a969315ef5f06c91ee0ea8a49c8e4a3::1747332446::res://.godot/exported/133200997/export-446b1ed11cc7129b20b35ff4df2b3752-level_1.scn
+res://scenes/levels/level_2.tscn::1e20fdc1901e188ad5c647e1e8fb95a9::1747332438::res://.godot/exported/133200997/export-a18c5401c17cd33ddcb0f5ac6af637f4-level_2.scn
 res://art/materials/body.tres::35beeb4de78162e343aea7e923245be2::1744734556::res://.godot/exported/133200997/export-a594b999545494186ec18caaee52986b-body.res
 res://art/materials/eye.tres::181f58cc6da21b79e5c2bdc950b5d80b::1744734556::res://.godot/exported/133200997/export-120b8c780516931a0912070bec89a145-eye.res
 res://art/materials/grass.tres::bc90f242e220a1a2fc3f4124724d0d24::1746721118::res://.godot/exported/133200997/export-8b3b0255d8d94c6b59b27433a1d2350c-grass.res
@@ -9,7 +8,14 @@ res://art/materials/mob_eye.tres::7457a69f45dd2322ce9cb4cd507a5ba8::1744734556::
 res://art/materials/platform.tres::8085d2a41d85c67bf7696b925e409862::1746721394::res://.godot/exported/133200997/export-2ba8fb299f327cde60502d0292a4ea6f-platform.res
 res://art/materials/pupil.tres::f27e1543ccc84907108f03b626db2e13::1744734556::res://.godot/exported/133200997/export-54b59410a7172c7546566bcef2513c87-pupil.res
 res://art/materials/wall.tres::441cff2a49e790ab761246a25cb0703d::1746721394::res://.godot/exported/133200997/export-0f51eedfb763231f9ba86eb3d4e7613f-wall.res
-res://scenes/objecst/mob.tscn::2597f0a16d5eda1943a4e4f3edd0e28c::1746723663::res://.godot/exported/133200997/export-d353c53c6ab9c1f6c1349072c03af40e-mob.scn
-res://scenes/objecst/player.tscn::31a065499bdf8f5402bf3138262ff1b0::1746723663::res://.godot/exported/133200997/export-29a1a4d31f985726ad7b79c4d465910d-player.scn
-res://scenes/objecst/spike.tscn::53701e5f797e8c2645852ade44872da5::1746902956::res://.godot/exported/133200997/export-d67ca1718c7b1954c3b18c951e2fa655-spike.scn
-res://scenes/main.tscn::72b315326d713eb33504405bd9122575::1746957438::res://.godot/exported/133200997/export-3ad5c15c4f3250da0cc7c1af1770d85f-main.scn
+res://scenes/main.tscn::13d1518e0f0eaa1b49f2dab7b524b000::1747332438::res://.godot/exported/133200997/export-3ad5c15c4f3250da0cc7c1af1770d85f-main.scn
+res://scenes/global/develop_label.tscn::eeafbfa3999ae740641d6fa42b77de31::1747074431::res://.godot/exported/133200997/export-fff2309018f3a11e9e7c607059808be8-develop_label.scn
+res://scenes/global/music_player.tscn::ea860fc63c9fb0a15a326636071dbb4f::1747026034::res://.godot/exported/133200997/export-a1da5df926f552576c0401bbab629ac3-music_player.scn
+res://scenes/objects/mob.tscn::9bc8d6bba79d2922263d748f2c9ddc7b::1747150786::res://.godot/exported/133200997/export-2c4ad743776bd11dfa0c0627d7819bdb-mob.scn
+res://scenes/objects/player.tscn::16d6819917d7f253021a65aecdad2cb3::1747150786::res://.godot/exported/133200997/export-e22257d67dbe52dbec1c44f306e13707-player.scn
+res://scenes/objects/spike.tscn::53701e5f797e8c2645852ade44872da5::1746902956::res://.godot/exported/133200997/export-bb671b5565054588e69a46bf50780007-spike.scn
+res://scenes/user_interface/level_hud.tscn::b9df67463b92a4f6fe9a311e444a24a6::1747332438::res://.godot/exported/133200997/export-223d5c62cc7ca73bb7978236aa60bd89-level_hud.scn
+res://scenes/user_interface/main_menu.tscn::4208d1f7985134cd6b27bd63d265c737::1747125758::res://.godot/exported/133200997/export-026e0735549cd60d3f78595d1618dec1-main_menu.scn
+res://scenes/user_interface/pause_menu.tscn::04d751a409d65a1a8e440d06529bcee1::1747332438::res://.godot/exported/133200997/export-729d61d184afe877f1d04d6b1c74e952-pause_menu.scn
+res://scenes/user_interface/settings.tscn::3d46769c7f0a544032a5c2eaf5cfa858::1747125758::res://.godot/exported/133200997/export-6d1df757a3a698a12f1f8b6266759f5e-settings.scn
+res://default_bus_layout.tres::981efb72525b1b7386212a8d27d90d95::1746970729::res://.godot/exported/133200997/export-19246414aa9fb561ced4b8dce477acec-default_bus_layout.res

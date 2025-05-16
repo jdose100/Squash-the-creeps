@@ -24,6 +24,20 @@
                 "--target",
                 "x86_64-pc-windows-gnu"
             ]
+        },
+        {
+            "label": "Export: debug (linux)",
+            "type": "shell",
+            "command": "godot-4",
+            "args": [
+                "--headless",
+                "--path",
+                "godot",
+                "--export-debug",
+                "\"Linux\"",
+                "build/linux/Deeps-Creeps"
+            ],
+            "dependsOn": "Build: Rust (linux)"
         }
     ]
 }

@@ -1,0 +1,109 @@
+[gd_scene load_steps=10 format=3 uid="uid://b5sgghgmmsrmm"]
+
+[ext_resource type="FontFile" uid="uid://cyxhh7ddkn62q" path="res://art/fonts/Montserrat-Medium.ttf" id="1_yasr7"]
+[ext_resource type="PackedScene" uid="uid://rva8xjcld2wo" path="res://scenes/user_interface/settings.tscn" id="2_8p2u1"]
+
+[sub_resource type="Theme" id="Theme_8p2u1"]
+default_font = ExtResource("1_yasr7")
+default_font_size = 22
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yasr7"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8p2u1"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_byjwm"]
+
+[sub_resource type="InputEventKey" id="InputEventKey_yasr7"]
+device = -1
+pressed = true
+keycode = 4194309
+echo = true
+
+[sub_resource type="InputEventKey" id="InputEventKey_8p2u1"]
+device = -1
+keycode = 32
+unicode = 32
+
+[sub_resource type="Shortcut" id="Shortcut_8p2u1"]
+events = [SubResource("InputEventKey_yasr7"), SubResource("InputEventKey_8p2u1")]
+
+[node name="PauseMenu" type="UserColorRect"]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_8p2u1")
+color = Color(0, 0, 0, 0.403922)
+
+[node name="SettingsHUD" parent="." instance=ExtResource("2_8p2u1")]
+visible = false
+layout_mode = 1
+
+[node name="NameOfMenu" type="Label" parent="."]
+layout_mode = 0
+offset_left = 272.0
+offset_top = 40.0
+offset_right = 410.0
+offset_bottom = 68.0
+scale = Vector2(1.4, 1.4)
+theme_override_colors/font_color = Color(0, 0, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+text = "Pause Menu"
+
+[node name="ContinueButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 288.0
+offset_top = 184.0
+offset_right = 408.0
+offset_bottom = 212.0
+scale = Vector2(1.4, 1.4)
+theme_override_colors/font_hover_color = Color(0.172549, 0.831373, 0.321569, 1)
+theme_override_colors/font_color = Color(0.172549, 0.756863, 0.458824, 1)
+theme_override_styles/focus = SubResource("StyleBoxEmpty_yasr7")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_8p2u1")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_byjwm")
+shortcut = SubResource("Shortcut_8p2u1")
+text = "Continue"
+
+[node name="RestartButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 288.0
+offset_top = 256.0
+offset_right = 408.0
+offset_bottom = 284.0
+scale = Vector2(1.4, 1.4)
+theme_override_colors/font_hover_color = Color(0.972549, 1, 0, 1)
+theme_override_colors/font_color = Color(0.972549, 0.921569, 0, 0.886275)
+theme_override_styles/focus = SubResource("StyleBoxEmpty_yasr7")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_8p2u1")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_byjwm")
+text = "Restart"
+
+[node name="SettingsButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 288.0
+offset_top = 328.0
+offset_right = 408.0
+offset_bottom = 356.0
+scale = Vector2(1.4, 1.4)
+theme_override_colors/font_color = Color(1, 0.933333, 1, 1)
+theme_override_styles/focus = SubResource("StyleBoxEmpty_yasr7")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_8p2u1")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_byjwm")
+text = "Settings"
+
+[node name="ExitButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 288.0
+offset_top = 400.0
+offset_right = 408.0
+offset_bottom = 428.0
+scale = Vector2(1.4, 1.4)
+theme_override_colors/font_hover_color = Color(1, 0, 0, 1)
+theme_override_colors/font_color = Color(0.941176, 0.0784314, 0.203922, 0.870588)
+theme_override_styles/focus = SubResource("StyleBoxEmpty_yasr7")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_8p2u1")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_byjwm")
+text = "Exit"
