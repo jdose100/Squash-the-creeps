@@ -1,0 +1,12 @@
+res://scenes/user_interface/pause_menu.tscn
+res://scenes/main.tscn
+res://scenes/levels/level_2.tscn
+res://scenes/levels/level_1.tscn
+res://scenes/user_interface/level_hud.tscn
+res://scenes/user_interface/settings.tscn
+res://logs/godot.log
+res://scenes/objects/end_of_level.tscn
+res://scenes/objects/mob.tscn
+res://scenes/objects/player.tscn
+res://squash_the_creeps.gdextension
+res://export_presets.cfg
