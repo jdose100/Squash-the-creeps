@@ -51,6 +51,7 @@ _data = {
 point_count = 6
 
 [node name="Level2 (Spikes level)" type="Level2"]
+all_mobs_on_level = 7
 
 [node name="PauseMenu" parent="." instance=ExtResource("7_ibugp")]
 visible = false
@@ -593,4 +594,5 @@ transform = Transform3D(1, 0, 0, 0, -0.707107, 0.707107, 0, -0.707107, -0.707107
 light_energy = 2.0
 
 [node name="Player" parent="." instance=ExtResource("3_ra442")]
+spawn_coords = Vector3(-37.589, 1.538, 42.167)
 transform = Transform3D(0.998458, 0, -0.0555078, 0, 1, 0, 0.0555078, 0, 0.998458, -37.589, 1.53849, 42.1674)

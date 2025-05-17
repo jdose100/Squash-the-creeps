@@ -93,7 +93,7 @@ impl Level2 {
         
         self
             .base()
-            .get_node_as::<CollisionShape3D>("Objects/Exit/CharacterBody3D")
+            .get_node_as::<CollisionShape3D>("Objects/Exit/CharacterBody3D/CollisionShape3D")
             .set_disabled(false);
     }
 

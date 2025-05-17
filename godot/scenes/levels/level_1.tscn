@@ -53,6 +53,7 @@ _data = {
 point_count = 4
 
 [node name="Level1 (Tutorial level)" type="BaseLevel"]
+all_mobs_on_level = 3
 
 [node name="PauseMenu" parent="." instance=ExtResource("1_oc4kc")]
 visible = false
@@ -328,6 +329,7 @@ curve = SubResource("Curve3D_6761a")
 transform = Transform3D(-0.883027, 0.00695445, 0.469269, -2.32831e-10, 0.99987, -0.0148184, -0.469321, -0.0130848, -0.88293, -15.0383, 0.722534, -5.96458)
 
 [node name="Player" parent="." instance=ExtResource("1_6iamk")]
+spawn_coords = Vector3(-32, 1, 33)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -32, 1, 33)
 
 [node name="Sun" type="DirectionalLight3D" parent="."]
