@@ -2,6 +2,7 @@
 name = "deeps-creeps"
 version = "0.1.0"
 edition = "2024"
+authors = ["jdose100"]
 
 [lib]
 crate-type = ["cdylib"]

@@ -95,6 +95,15 @@ impl Level2 {
             .base()
             .get_node_as::<CollisionShape3D>("Objects/Exit/CharacterBody3D/CollisionShape3D")
             .set_disabled(false);
+
+        // Оживляет всех мобов.
+        for i in 0..self.all_mobs_on_level {
+            let mob = self.base().try_get_node_as::<Mob>(&format!("Mobs/Mob{i}"));
+
+            if let Some(mut mob) = mob {
+                mob.call_deferred("alive", &[]);
+            }
+        }
     }
 
     fn on_mob_squashed(&mut self) {

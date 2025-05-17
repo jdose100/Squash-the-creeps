@@ -48,14 +48,14 @@ impl ConfigData {
     fn new() -> Result<Self, std::io::Error> {
         let file_path: String;
         
-        // if cfg!(debug_assertions) && cfg!(target_os = "linux") {
-        //     file_path = "/home/user/code/godot/squash_the_creeps_rust/config.json".to_string();
-        // } else {
-        //     file_path = 
-        //         env::current_exe().unwrap().parent().unwrap().to_str().unwrap().to_string() + "/config.json";
-        // }
+        if cfg!(debug_assertions) && cfg!(target_os = "linux") {
+            file_path = "/home/user/code/godot/squash_the_creeps_rust/config.json".to_string();
+        } else {
+            file_path = 
+                env::current_exe().unwrap().parent().unwrap().to_str().unwrap().to_string() + "/config.json";
+        }
 
-        file_path = env::current_exe().unwrap().parent().unwrap().to_str().unwrap().to_string() + "/config.json";
+        // file_path = env::current_exe().unwrap().parent().unwrap().to_str().unwrap().to_string() + "/config.json";
 
         // Структура для получения данных из файла.
         #[derive(Deserialize, Debug)]

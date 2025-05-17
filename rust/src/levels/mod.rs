@@ -275,8 +275,7 @@ impl BaseLevel {
 
         self.base()
             .get_node_as::<Player>("Player")
-            .bind_mut()
-            .alive();
+            .call_deferred("alive", &[]);
 
         // Оживляет всех мобов.
         for i in 0..self.all_mobs_on_level {
