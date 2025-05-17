@@ -1,5 +1,6 @@
-# About "Deeps-Creeps"
-Deeps-Creeps - это маленькая игра - платформер, где цель игрока это пройти все уровни в игре.
+## О игре Deeps-Creeps
+Deeps-Creeps - это маленькая игра платформер, где цель игрока это пройти все уровни в игре.
+
 Игра сделана на Godot 4 + Rust.
 
 ## Предупреждение!
@@ -15,5 +16,7 @@ Deeps-Creeps - это маленькая игра - платформер, где
 Для того чтобы собрать игру вам требуется `rustc`. Перейдите в директорию `rust/` и выполните следующую
 команду в зависимости от системы.
 
-Для `Windows`: `cargo build --target x86_64-pc-windows-gnu`
-Для `Linux`: `cargo build --target x86_64-unknown-linux-gnu`
+Для `Windows`: 
+`cargo build --target x86_64-pc-windows-gnu`
+Для `Linux`: 
+`cargo build --target x86_64-unknown-linux-gnu`
