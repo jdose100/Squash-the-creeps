@@ -1,11 +1,13 @@
-[gd_scene load_steps=21 format=3 uid="uid://bannay6t7dfdn"]
+[gd_scene load_steps=34 format=3 uid="uid://bannay6t7dfdn"]
 
 [ext_resource type="Material" uid="uid://c0cp1qoswa4to" path="res://art/materials/wall.tres" id="1_fiq81"]
 [ext_resource type="Material" uid="uid://dxpx4g1p0a2yj" path="res://art/materials/grass.tres" id="1_j2425"]
 [ext_resource type="PackedScene" uid="uid://dcfyhjm3032vn" path="res://scenes/objects/spike.tscn" id="1_qpwj6"]
 [ext_resource type="PackedScene" uid="uid://fxl4ba8g4ca3" path="res://scenes/objects/mob.tscn" id="3_l37oo"]
 [ext_resource type="PackedScene" uid="uid://cwevoa4jfecwe" path="res://scenes/objects/player.tscn" id="3_ra442"]
+[ext_resource type="Shader" uid="uid://c0k7c4ygy7882" path="res://scripts/shaders/transparent_wall.gdshader" id="4_3p04p"]
 [ext_resource type="Material" uid="uid://c52akaeps0aid" path="res://art/materials/platform.tres" id="4_ibugp"]
+[ext_resource type="Script" uid="uid://cbxnbk5stu4ky" path="res://scripts/transparent_walls.gd" id="5_qsp8v"]
 [ext_resource type="PackedScene" uid="uid://gygb8mwr6f2g" path="res://scenes/objects/end_of_level.tscn" id="6_8qukl"]
 [ext_resource type="PackedScene" uid="uid://b5sgghgmmsrmm" path="res://scenes/user_interface/pause_menu.tscn" id="7_ibugp"]
 
@@ -22,7 +24,112 @@ albedo_color = Color(0, 0.764706, 0.0588235, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_l37oo"]
 
+[sub_resource type="Shader" id="Shader_nt80m"]
+code = "shader_type spatial;
+render_mode blend_mix;
+
+uniform float alpha;
+
+void fragment() {
+	// Считаем альфу.
+	float new_alpha;
+	if (alpha <= 3.7)
+		new_alpha = normalize(alpha) - 0.17;
+	else
+		new_alpha = 1.0;
+	ALPHA = new_alpha;
+
+	// Устанавливаем albedo.
+	ALBEDO = vec3(0.92, 0.86, 0.0);
+}
+
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tv7cl"]
+render_priority = 0
+shader = SubResource("Shader_nt80m")
+shader_parameter/alpha = 0.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_r88tb"]
+resource_local_to_scene = true
+lightmap_size_hint = Vector2i(14, 21)
+material = SubResource("ShaderMaterial_tv7cl")
+
+[sub_resource type="BoxMesh" id="BoxMesh_brxtv"]
+resource_local_to_scene = true
+lightmap_size_hint = Vector2i(14, 21)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nt80m"]
+render_priority = 0
+shader = ExtResource("4_3p04p")
+shader_parameter/alpha = 0.0
+
 [sub_resource type="BoxMesh" id="BoxMesh_qpwj6"]
+resource_local_to_scene = true
+lightmap_size_hint = Vector2i(14, 21)
+material = SubResource("ShaderMaterial_nt80m")
+
+[sub_resource type="Shader" id="Shader_qsp8v"]
+code = "shader_type spatial;
+render_mode blend_mix;
+
+uniform float alpha;
+
+void fragment() {
+	// Считаем альфу.
+	float new_alpha;
+	if (alpha <= 3.7)
+		new_alpha = normalize(alpha) - 0.17;
+	else
+		new_alpha = 1.0;
+	ALPHA = new_alpha;
+
+	// Устанавливаем albedo.
+	ALBEDO = vec3(0.92, 0.86, 0.0);
+}
+
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_brxtv"]
+render_priority = 0
+shader = SubResource("Shader_qsp8v")
+shader_parameter/alpha = 0.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_tv7cl"]
+resource_local_to_scene = true
+lightmap_size_hint = Vector2i(14, 21)
+material = SubResource("ShaderMaterial_brxtv")
+
+[sub_resource type="Shader" id="Shader_r88tb"]
+code = "shader_type spatial;
+render_mode blend_mix;
+
+uniform float alpha;
+
+void fragment() {
+	// Считаем альфу.
+	float new_alpha;
+	if (alpha <= 3.7)
+		new_alpha = normalize(alpha) - 0.17;
+	else
+		new_alpha = 1.0;
+	ALPHA = new_alpha;
+
+	// Устанавливаем albedo.
+	ALBEDO = vec3(0.92, 0.86, 0.0);
+}
+
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1yj8c"]
+render_priority = 0
+shader = SubResource("Shader_r88tb")
+shader_parameter/alpha = 0.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_ndlae"]
+resource_local_to_scene = true
+lightmap_size_hint = Vector2i(14, 21)
+material = SubResource("ShaderMaterial_1yj8c")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_g2h2n"]
 size = Vector3(100, 2, 100)
@@ -269,19 +376,6 @@ transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 18.3046, 7.78467, -47.4892)
 
 [node name="SpawnRoom" type="Node" parent="Objects/Walls"]
 
-[node name="Wall" type="StaticBody3D" parent="Objects/Walls/SpawnRoom"]
-transform = Transform3D(-1.06848e-06, 0, 2, 0, 7.01, 0, -24.4439, 0, -8.74228e-08, -26.6349, 3.05209, 37.6387)
-collision_layer = 4
-collision_mask = 0
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/Walls/SpawnRoom/Wall"]
-shape = SubResource("BoxShape3D_l37oo")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/Walls/SpawnRoom/Wall"]
-sorting_use_aabb_center = false
-material_override = ExtResource("1_fiq81")
-mesh = SubResource("BoxMesh_qpwj6")
-
 [node name="Wall2" type="StaticBody3D" parent="Objects/Walls/SpawnRoom"]
 transform = Transform3D(21.7996, 0, 0, 0, 7.01, 0, 0, 0, 2, -37.9434, 3, 49.0263)
 collision_layer = 4
@@ -291,9 +385,20 @@ collision_mask = 0
 shape = SubResource("BoxShape3D_l37oo")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/Walls/SpawnRoom/Wall2"]
-sorting_use_aabb_center = false
+mesh = SubResource("BoxMesh_r88tb")
+script = ExtResource("5_qsp8v")
+
+[node name="Wall" type="StaticBody3D" parent="Objects/Walls/SpawnRoom"]
+transform = Transform3D(-1.06848e-06, 0, 2, 0, 7.01, 0, -24.4439, 0, -8.74228e-08, -26.6349, 3.05209, 37.6387)
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/Walls/SpawnRoom/Wall"]
+shape = SubResource("BoxShape3D_l37oo")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/Walls/SpawnRoom/Wall"]
 material_override = ExtResource("1_fiq81")
-mesh = SubResource("BoxMesh_qpwj6")
+mesh = SubResource("BoxMesh_brxtv")
 
 [node name="RoomWithFirstMob" type="Node" parent="Objects/Walls"]
 
@@ -403,8 +508,8 @@ shape = SubResource("BoxShape3D_l37oo")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/Walls/Arena/Wall"]
 sorting_use_aabb_center = false
-material_override = ExtResource("1_fiq81")
-mesh = SubResource("BoxMesh_qpwj6")
+mesh = SubResource("BoxMesh_tv7cl")
+script = ExtResource("5_qsp8v")
 
 [node name="Wall2" type="StaticBody3D" parent="Objects/Walls/Arena"]
 transform = Transform3D(25.8207, 0, 0, 0, 7.01, 0, 0, 0, 2, 31.9831, 3.05209, 28.8415)
@@ -416,8 +521,8 @@ shape = SubResource("BoxShape3D_l37oo")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/Walls/Arena/Wall2"]
 sorting_use_aabb_center = false
-material_override = ExtResource("1_fiq81")
-mesh = SubResource("BoxMesh_qpwj6")
+mesh = SubResource("BoxMesh_ndlae")
+script = ExtResource("5_qsp8v")
 
 [node name="Wall3" type="StaticBody3D" parent="Objects/Walls/Arena"]
 transform = Transform3D(-1.92398e-06, 0, 2, 0, 7.01, 0, -44.0155, 0, -8.74228e-08, 44.5252, 3.05209, 6.6488)

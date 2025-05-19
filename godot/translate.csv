@@ -1,0 +1,22 @@
+,en,ru
+
+START_BUTTON,Start,Играть
+
+SETTINGS,"Settings","Настройки"
+EXIT,"Exit","Выход"
+
+PAUSE_MENU,"Pause Menu","Меню паузы"
+CONTINUE_BUTTON,Continue,Продолжить
+RESTART_BUTTON,"Restart","Заново"
+
+LEVELS_MENU,"Levels","Уровни"
+
+RU_LANGUAGE,"Русский (RU)","Русский (RU)"
+EN_LANGUAGE,"English (EN)","English (EN)"
+SET_LANGUAGE,"Set new language","Установить новый язык"
+LANGUAGE_BUTTON,"Language","Язык"
+
+MUSIC_VOLUME,"Music volume","Громкость музыки"
+SOUND_EFFECTS_VOLUME,"Sound effects volume","Громкость звуковых эффектов"
+SOUND_BUTTON,"Sound","Звук"
+

@@ -1,0 +1,4 @@
+res://logs/godot.log
+res://scenes/objects/player.tscn
+res://art/materials/wall.tres
+res://scripts/shaders/transparent_wall.gdshader

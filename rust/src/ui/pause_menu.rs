@@ -2,8 +2,6 @@
 
 use godot::{classes::{Button, ColorRect, Label}, prelude::*};
 
-use super::translation::LanguageText;
-
 /// Этот класс содержит реализацию меню паузы.
 #[derive(GodotClass)]
 #[class(init, base = ColorRect)]
@@ -12,34 +10,6 @@ pub struct PauseMenu {
 }
 
 impl PauseMenu {
-    /// Переводит меню на новый язык.
-    pub fn translate(&mut self, language: &LanguageText) {
-        self
-            .base()
-            .get_node_as::<Label>("NameOfMenu")
-            .set_text(language.pause_menu);
-
-        self
-            .base()
-            .get_node_as::<Button>("ContinueButton")
-            .set_text(language.continue_button);
-
-        self
-            .base()
-            .get_node_as::<Button>("RestartButton")
-            .set_text(language.restart);
-
-        self
-            .base()
-            .get_node_as::<Button>("SettingsButton")
-            .set_text(language.settings);
-
-        self
-            .base()
-            .get_node_as::<Button>("ExitButton")
-            .set_text(language.exit);
-    }
-
     pub fn hide(&self) {
         self.base().get_node_as::<Label>("NameOfMenu").hide();
 
@@ -58,3 +28,4 @@ impl PauseMenu {
         self.base().get_node_as::<Button>("ExitButton").show();
     }
 }
+

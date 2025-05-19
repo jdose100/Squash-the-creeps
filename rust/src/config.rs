@@ -3,7 +3,8 @@
 //! (язык, плашки настроек, например HSlider), хранение настроек
 //! и прогресса в файле.
 
-use crate::ui::translation::{LanguageText, Languages, EN_LANGUAGE, RU_LANGUAGE};
+use crate::ui::settings;
+use crate::ui::translation::Languages;
 
 use std::fs::File;
 use std::io::Read;
@@ -16,7 +17,7 @@ use std::os::unix::fs::FileExt;
 #[cfg(target_os = "windows")]
 use std::os::windows::fs::FileExt;
 
-use godot::classes::AudioServer;
+use godot::classes::{AudioServer, TranslationServer};
 use godot::global::godot_error;
 use serde_derive::{Serialize, Deserialize};
 use serde_json::{to_string, from_slice};
@@ -91,12 +92,30 @@ impl ConfigData {
         let music_volume_idx = audio_server.get_bus_index("Music");
         audio_server.set_bus_volume_db(music_volume_idx, data.settings.music_volume as f32);
 
+        // Устанавливаем язык.
+        let mut server = TranslationServer::singleton();
+        
+        match data.settings.language {
+            Languages::RU => server.set_locale("ru"),
+            Languages::EN => server.set_locale("en"),
+        }
+
         // Возвращаем структуру.
         Ok(Self {
             settings: data.settings,
             progress: data.progress,
             file,
         })
+    }
+
+    pub fn set_language(&mut self, language: Languages) {
+        let mut server = TranslationServer::singleton();
+        self.settings.language = language;
+
+        match language {
+            Languages::RU => server.set_locale("ru"), 
+            Languages::EN => server.set_locale("en"),
+        }
     }
 
     /// Данный метод записывает данные в файл конфига.
@@ -140,14 +159,6 @@ impl ConfigData {
                 "Error write data to {}: {error:?}", 
                 env::current_exe().unwrap().parent().unwrap().to_str().unwrap().to_string() + "/config"
             );
-        }
-    }
-
-    /// Получаем текущий язык из конфига.
-    pub fn get_language(&self) -> &'static LanguageText {
-        match self.settings.language {
-            Languages::RU => &RU_LANGUAGE,
-            Languages::EN => &EN_LANGUAGE,
         }
     }
 }

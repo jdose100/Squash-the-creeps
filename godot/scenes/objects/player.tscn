@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://d0ypm0v45pwdv" path="res://art/player.glb" id="1_3vyb7"]
 [ext_resource type="AudioStream" uid="uid://c2wj46ws3738s" path="res://art/player_dead.mp3" id="3_qhqgy"]
-[ext_resource type="Material" path="res://art/materials/body.tres" id="4_dqkch"]
+[ext_resource type="Material" path="res://art/materials/mobs_and_player/body.tres" id="4_dqkch"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dqkch"]
 transparency = 3

@@ -2,7 +2,7 @@
 //! Данный UI может менять настройки игры, но ответственность за
 //! сохранение настроек несет MainScene.
 
-use godot::{classes::{AudioServer, Button, ColorRect, HSlider, IColorRect, Label}, obj::WithBaseField, prelude::*};
+use godot::{classes::{AudioServer, Button, ColorRect, HSlider, IColorRect}, obj::WithBaseField, prelude::*};
 use crate::config::CONFIG;
 
 use super::translation::*;
@@ -40,10 +40,8 @@ impl IColorRect for SettingsHUD {
             .signals()
             .pressed()
             .connect_obj(self, |this: &mut Self| { 
-                CONFIG.lock().unwrap().settings.language = Languages::RU;
+                CONFIG.lock().unwrap().set_language(Languages::RU);
                 this.settings_changed = true;
-
-                this.signals().language_changed().emit(); 
             });
 
         self
@@ -52,10 +50,8 @@ impl IColorRect for SettingsHUD {
             .signals()
             .pressed()
             .connect_obj(self, |this: &mut Self| {
-                CONFIG.lock().unwrap().settings.language = Languages::EN;
+                CONFIG.lock().unwrap().set_language(Languages::EN);
                 this.settings_changed = true;
-
-                this.signals().language_changed().emit();
             });
 
         // * Сигналы для открытия разных меню.
@@ -104,64 +100,10 @@ impl SettingsHUD {
     #[signal]
     /// Сигнал указывающий что меню настроек было закрыто.
     pub fn settings_closed();
-
-    // * Сигналы связанные с изменением языка.
-
-    #[signal]
-    /// Сигнал указывающий что был изменён язык.
-    pub fn language_changed();
 }
 
 /// Данный impl блок содержит реализацию методов класса SettingsHUD.
 impl SettingsHUD { 
-    /// Переводит данный интерфейс на новый язык.
-    pub fn update_text_from_language(&self, language: &LanguageText) {
-        // * Обновляет настройки языка на новый язык.
-        self
-            .base()
-            .get_node_as::<Button>("LanguageSettingsButton")
-            .set_text(language.language_button);
-
-        self
-            .base()
-            .get_node_as::<Label>("LanguageSettings/SetLanguageLabel")
-            .set_text(language.set_current_language);
-
-        self
-            .base()
-            .get_node_as::<Label>("LanguageSettings/CurrentLanguageLabel")
-            .set_text(
-                &format!("{}: {}", language.current_language, language.language.to_string())
-            );
-        
-        // * Обновляет настройки звука на новый язык.
-        self
-            .base()
-            .get_node_as::<Button>("SoundSettingsButton")
-            .set_text(language.sound_button);
-
-        self
-            .base()
-            .get_node_as::<Label>("SoundSettings/MusicVolumeLabel")
-            .set_text(language.music_volume);
-
-        self
-            .base()
-            .get_node_as::<Label>("SoundSettings/SoundEffectsVolumeLabel")
-            .set_text(language.sound_effect_volume);
-
-        // * Обновляем название меню и кнопку выходу на новый язык.
-        self
-            .base()
-            .get_node_as::<Label>("MenuName")
-            .set_text(language.settings);
-
-        self
-            .base()
-            .get_node_as::<Button>("ExitButton")
-            .set_text(language.exit)
-    }
-
     /// Закрывает все открытые меню настроек.
     pub fn close_all_settings_menus(&self) {
         self.base().get_node_as::<Node2D>("LanguageSettings").hide();

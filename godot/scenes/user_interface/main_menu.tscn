@@ -78,7 +78,7 @@ theme_override_constants/outline_size = 5
 theme_override_styles/focus = SubResource("StyleBoxEmpty_jbsfc")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_y1h3b")
 action_mode = 0
-text = "Settings"
+text = "SETTINGS"
 
 [node name="StartButton" type="Button" parent="." groups=["main_menu"]]
 modulate = Color(0.964706, 0, 0.211765, 1)
@@ -91,4 +91,4 @@ theme_type_variation = &"FlatButton"
 theme_override_constants/outline_size = 4
 theme_override_styles/focus = SubResource("StyleBoxEmpty_cufge")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_lmgon")
-text = "Start"
+text = "START_BUTTON"

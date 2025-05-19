@@ -158,9 +158,10 @@ impl Mob {
         self.base_mut().set_position(spawn_coords);
 
         self.base().get_node_as::<Node3D>("Pivot").show();
+
         self
             .base()
             .get_node_as::<CollisionShape3D>("CollisionShape3D")
-            .set_deferred("disabled", &Variant::from(true));
+            .set_disabled(false);
     }
 }

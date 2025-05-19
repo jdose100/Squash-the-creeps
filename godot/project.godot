@@ -83,6 +83,10 @@ pause={
 ]
 }
 
+[internationalization]
+
+locale/translations=PackedStringArray("res://translate.en.translation", "res://translate.ru.translation")
+
 [layer_names]
 
 3d_physics/layer_1="player"

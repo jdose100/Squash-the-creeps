@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://oujmwulpxbls"]
+
+[ext_resource type="Shader" uid="uid://c0k7c4ygy7882" path="res://scripts/shaders/transparent_wall.gdshader" id="2_xyi5w"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("2_xyi5w")
+shader_parameter/alpha = 0.0

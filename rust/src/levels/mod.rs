@@ -4,10 +4,10 @@
 //! BaseLevel в этом случае выступает в качестве родителя.
 
 
-use crate::{config::CONFIG, mob::Mob, player::Player, ui::{pause_menu::PauseMenu, settings::SettingsHUD}};
+use crate::{mob::Mob, player::Player, ui::{pause_menu::PauseMenu, settings::SettingsHUD}};
 use end_of_level::HowPlayerExitedFromLevel;
 use godot::{
-    classes::{Area3D, Button, CollisionShape3D, ColorRect, InputEvent, Marker3D, Path3D, PathFollow3D}, 
+    classes::{Area3D, Button, CollisionShape3D, ColorRect, GpuParticles3D, InputEvent, Marker3D, Path3D, PathFollow3D}, 
     global::randf_range, 
     obj::{bounds::DeclUser, BaseRef, Bounds, WithBaseField}, 
     prelude::*
@@ -61,12 +61,6 @@ impl INode for BaseLevel {
 
         // Инициализируем уровень.
         Self::init_node(&self.base(), self.mobs.clone(), self.base().get_scene_file_path(), 1);
-
-        self.base()
-            .get_node_as::<Player>("Player")
-            .signals()
-            .hit()
-            .connect_obj(self, Self::on_player_hit);
     }
 
     fn process(&mut self, _delta: f64) {
@@ -111,6 +105,17 @@ impl BaseLevel {
             ).set_disabled(true);
             node.get_node_as::<Node3D>("Objects/Exit").hide();
 
+            // Настройка перезапуска уровня после смерти игрока.
+            node.get_node_as::<Player>("Player")
+                .signals().hit()
+                .connect_obj(&node.to_godot().cast::<T>(), |this: &mut T| {
+                    this.base()
+                        .get_node_as::<GpuParticles3D>("Player/DeathEffect")
+                        .signals().finished().connect_obj(this, |this: &mut T| {
+                            this.base().get_tree().unwrap().change_scene_to_file(&this.base().get_scene_file_path());
+                        });
+                });
+
             // Настройка выхода из уровня.
             node
                 .get_node_as::<Area3D>("Player/ExitDetector")
@@ -129,10 +134,7 @@ impl BaseLevel {
                 });
         }
 
-        if let Some(mut pause_menu) = node.try_get_node_as::<PauseMenu>("PauseMenu") {
-            // Сразу переводим меню на уже установленный язык.
-            pause_menu.bind_mut().translate(CONFIG.lock().unwrap().get_language());
-
+        if let Some(pause_menu) = node.try_get_node_as::<PauseMenu>("PauseMenu") {
             // * Настройка кнопки продолжить.
             let continue_func = move |this: &mut T| { 
                 this.base().get_node_as::<Player>("Player").set_physics_process(true);
@@ -194,16 +196,7 @@ impl BaseLevel {
                 .connect_obj(&pause_menu, |this: &mut PauseMenu| {
                     this.base().get_node_as::<SettingsHUD>("SettingsHUD").show();
                     this.hide();
-                });
-            
-            // Изменение настроек.
-            pause_menu
-                .get_node_as::<SettingsHUD>("SettingsHUD")
-                .signals()
-                .language_changed()
-                .connect_obj(&pause_menu, |this: &mut PauseMenu| {
-                    this.translate(CONFIG.lock().unwrap().get_language());
-                });
+                }); 
         }
     }
 
@@ -262,32 +255,6 @@ impl BaseLevel {
                 .set_disabled(false);
         }
     }
-
-    /// Авто оживление игрока.
-    // ! ТОЛЬКО ДЛЯ РАЗРАБОТКИ!
-    fn on_player_hit(&mut self) {
-        self.base().get_node_as::<Node3D>("Objects/Exit").hide();
-        
-        self
-            .base()
-            .get_node_as::<CollisionShape3D>("Objects/Exit/CharacterBody3D/CollisionShape3D")
-            .set_disabled(false);
-
-        self.base()
-            .get_node_as::<Player>("Player")
-            .call_deferred("alive", &[]);
-
-        // Оживляет всех мобов.
-        for i in 0..self.all_mobs_on_level {
-            let mob = self.base().try_get_node_as::<Mob>(&format!("Mobs/Mob{i}"));
-
-            if let Some(mut mob) = mob {
-                mob.bind_mut().alive();
-            }
-        }
-
-        self.squashed_mobs = 0;
-    }
 }
 
 // * Функции, предоставляющие строковый API для загрузки данных из сцены.
@@ -311,3 +278,4 @@ fn get_text_mob_follow_path(mob_num: i64) -> String {
 fn get_text_mob_path(mob_num: i64) -> String {
     format!("Mobs/Mob{mob_num}Path")
 }
+

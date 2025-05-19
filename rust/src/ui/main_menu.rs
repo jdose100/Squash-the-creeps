@@ -1,10 +1,9 @@
 //! Данный модуль содержит логику для UI главного меню.
 
-use crate::config::CONFIG;
 
 use super::settings::SettingsHUD;
 use godot::{
-    classes::{Button, ColorRect, IColorRect, Label},
+    classes::{Button, ColorRect, IColorRect},
     obj::WithBaseField,
     prelude::*,
 };
@@ -25,8 +24,6 @@ impl IColorRect for MainMenu {
     }
 
     fn ready(&mut self) {
-        self.update_text_from_language();
-
         //* Настраиваем меню настроек.
         let mut settings = self.base().get_node_as::<SettingsHUD>("SettingsHUD");
 
@@ -40,11 +37,6 @@ impl IColorRect for MainMenu {
 
         // Устанавливает сигнал для закрытия меню настроек.
         settings.signals().settings_closed().connect_obj(self, Self::close_settings_menu);
-
-        // * Устанавливаем сигналы для изменения языка.
-        settings.signals().language_changed().connect_obj(self, |this: &mut Self| {
-            this.update_text_from_language();
-        });
 
         // * Настраиваем меню уровней
         
@@ -68,24 +60,6 @@ impl IColorRect for MainMenu {
 
 impl MainMenu {
     /// Настраиваем интерфейс на новый язык.
-    pub fn update_text_from_language(&mut self) {
-        let language = CONFIG.lock().unwrap().get_language();
-
-        self
-            .base()
-            .get_node_as::<SettingsHUD>("SettingsHUD")
-            .bind_mut()
-            .update_text_from_language(language);
-
-        // * Обновляет MainHUD.
-        self.base().get_node_as::<Button>("StartButton").set_text(language.start_button);
-        self.base().get_node_as::<Button>("SettingsButton").set_text(language.settings);
-
-        // * Обновляет LevelHUD.
-        self.base().get_node_as::<Button>("LevelHUD/ExitButton").set_text(language.exit);
-        self.base().get_node_as::<Label>("LevelHUD/MenuName").set_text(language.levels);
-    }
-
     /// Настраивает меню для старта игры.
     pub fn start_new_game(&mut self) {
         self.base_mut().hide();

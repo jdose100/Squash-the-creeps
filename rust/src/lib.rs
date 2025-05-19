@@ -13,3 +13,4 @@ mod ui;
 struct SquashTheCreeps;
 #[gdextension]
 unsafe impl ExtensionLibrary for SquashTheCreeps {}
+
